@@ -66,6 +66,15 @@ module.exports = function(grunt) {
                 ]
             }
         },
+        symlink: {
+            options: {
+                overwrite: false
+            },
+            explicit: {
+                src: 'bower_components/guss-webfonts/webfonts',
+                dest: 'build/fonts/0.1.0'
+            },
+        },
 
         connect: {
             server: {
@@ -76,5 +85,5 @@ module.exports = function(grunt) {
             }
       }
     });
-    grunt.registerTask('default', ['clean','sass','shell','template','copy','connect', 'watch']);
+    grunt.registerTask('default', ['clean','sass','shell','template','copy','symlink', 'connect', 'watch']);
 }
