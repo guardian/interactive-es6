@@ -7,6 +7,7 @@
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-connect": "^0.10.1",
     "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-symlink": "^0.3.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-sass": "^0.18.1",
     "grunt-shell": "^1.1.2",
@@ -23,11 +24,22 @@
     },
     "configFile": "src/js/config.js",
     "dependencies": {
+      "babel": "npm:babel-core@^5.1.11",
+      "babel-runtime": "npm:babel-runtime@^5.1.11",
+      "d3": "github:mbostock/d3@^3.5.5",
       "guardian/iframe-messenger": "github:guardian/iframe-messenger@master",
+      "json": "github:systemjs/plugin-json@^0.1.0",
+      "mbostock/topojson": "github:mbostock/topojson@^1.6.19",
+      "moment": "github:moment/moment@^2.10.2",
+      "qwery": "npm:qwery@^4.0.0",
       "reqwest": "github:ded/reqwest@^1.1.5",
+      "swig": "npm:swig@^1.4.2",
       "text": "github:systemjs/plugin-text@^0.0.2"
     },
     "devDependencies": {
+      "babel": "npm:babel-core@^5.1.11",
+      "babel-runtime": "npm:babel-runtime@^5.0.12",
+      "core-js": "npm:core-js@^0.8.1",
       "traceur": "github:jmcriffey/bower-traceur@0.0.87",
       "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87"
     }
