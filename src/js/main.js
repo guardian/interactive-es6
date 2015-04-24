@@ -4,7 +4,6 @@ import swig from 'swig'
 import qwery from 'qwery'
 import { Seatstack } from './components/seatstack'
 import { Ticker } from './components/ticker'
-// import { TimeSlider } from './components/timeslider'
 import { UKCartogram } from './components/cartogram'
 import { renderCartogram } from './components/cartogram'
 import { Dropdown } from './components/dropdown'
@@ -33,7 +32,6 @@ class ElectionResults {
 		}
 
 		this.components = {
-			// timeslider: new TimeSlider(el.querySelector('#timeslider'), this.timeFilterAndRender.bind(this) ),
 			details: new Details(el.querySelector('#constituency-details')),
 			cartogram: new UKCartogram(this.cartogramEl, this.selectConstituency.bind(this)),
 			dropdown: new Dropdown(dropdownOpts),
@@ -88,24 +86,6 @@ class ElectionResults {
 				evt.stopPropagation();
 			}
 		}.bind(this));
-
-
-		// this.components.ticker.el.addEventListener('mouseover').forEach(function(el) {
-		// 	console.log(el);
-		// 	el.addEventListener('mouseenter', evt => console.log(el)) //this.focusConstituency(el.getAttribute('constituency-link'))
-		// 	el.addEventListener('mouseleave', evt => this.blurConstituency())
-		// })
-		// this.components.ticker.el.addEventListener('mouseover', function(evt) {
-		// 	console.log('OVER', evt);
-		// 	var id = evt.target.getAttribute('constituency-link');
-		// 	if (id) this.focusConstituency(id);
-		// }.bind(this));
-
-		// this.components.ticker.el.addEventListener('mouseout', function(evt) {
-		// 	console.log('OUT', evt);
-		// 	var id = evt.target.getAttribute('constituency-link');
-		// 	if (id) this.blurConstituency();
-		// }.bind(this));
 
 		var latestResults = this.el.querySelector('.veri__latest-results')
 		latestResults.addEventListener('mouseover', () => this.cartogramEl.setAttribute('latest-results', '') )
