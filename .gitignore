@@ -2,3 +2,4 @@ tmp
 node_modules
 jspm_packages
 build
+bower_components
