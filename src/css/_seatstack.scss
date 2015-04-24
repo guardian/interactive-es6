@@ -1,0 +1,54 @@
+.seatstack {
+    position: relative;
+
+    font-family: "Guardian Agate Sans 1 Web","Agate Sans",sans-serif;
+    font-size: 12px;
+
+    border-bottom: 1px solid #DCDCDC;
+    padding-bottom: 20px;
+    overflow: hidden;
+}
+
+.seatstack__majority {
+    height: 40px;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    &:after {
+        content: '';
+        border-left: 1px solid #333;
+        position: absolute;
+        left: 50%;
+        height: 20px;
+        bottom: 0;
+    }
+}
+.seatstack ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    height: 50px;
+
+    li {
+      float: left;
+      height: 100%;
+      text-align: center;
+      position: relative;
+      span {
+        position: absolute;
+        top: -20px;
+        font-size: 16px;
+        left: -50px;
+        right: -50px;
+      }
+    }
+
+    li[data-partyname='Green'], li[data-partyname='UKIP'] {
+        span { bottom: -20px; top: auto; }
+    }
+
+    li:hover {
+        -webkit-filter: brightness(90%);
+        filter: brightness(0.9);
+    }
+}

@@ -33,6 +33,7 @@
       "moment": "github:moment/moment@^2.10.2",
       "qwery": "npm:qwery@^4.0.0",
       "reqwest": "github:ded/reqwest@^1.1.5",
+      "riccardoscalco/textures": "github:riccardoscalco/textures@master",
       "swig": "npm:swig@^1.4.2",
       "text": "github:systemjs/plugin-text@^0.0.2"
     },

@@ -1,0 +1,146 @@
+.veri {
+    background-color: white;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+
+    h1 {
+        font-family: "Guardian Egyptian Web",Georgia,serif;
+        font-size: 32px;
+        font-weight: normal;
+        color: black;
+        line-height: 38px;
+    }
+
+    h2 {
+        line-height: 1.2;
+        font-family: "Guardian Egyptian Web",Georgia,serif;
+        font-size: 22px;
+        font-weight: normal;
+        color: #333;
+    }
+}
+[data-partyname='Lab'] { background-color: #E31F26; color: #E31F26; }
+[data-partyname='SNP'] { background-color: #FCDD03; color: #FCDD03; }
+[data-partyname='Green'] { background-color: #33A22B; color: #33A22B; }
+[data-partyname='Others'] { background-color: #B3B3B4; color: #B3B3B4; }
+[data-partyname='Pending'] { background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2N8+PDhGQYoOHnyJAMjTADEMTc3hwjAOCCFjKtWrToDkoEBAG1vFhyE06BwAAAAAElFTkSuQmCC) repeat; color: #B3B3B4; }
+[data-partyname='UKIP'] { background-color: #7D0069; color: #7D0069; }
+[data-partyname='LD'] { background-color: #FFB900; color: #FFB900; }
+[data-partyname='Con'] { background-color: #005789; color: #005789; }
+
+.veri__blip {
+    width: 5px;
+    height: 10px;
+    margin-right: 3px;
+    margin-bottom: 2px;
+    border-radius: 2px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@each $party, $color in $partyColors {
+    .veri__blip--#{$party} {
+        background-color: $color;
+    }
+}
+
+.legend {
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        li {
+            float: left;
+            margin-right: 10px;
+            span {
+                width: 5px;
+                height: 10px;
+                margin-right: 3px;
+                margin-bottom: 2px;
+                border-radius: 2px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+    }
+}
+.veri__ticker {
+    list-style-type: none;
+    padding: 0;
+
+    font-family: "Guardian Agate Sans 1 Web","Agate Sans",sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    color: #333;
+
+    .veri__relative-date {
+        
+      display: inline-block;
+      width: 116px;
+    }
+}
+.veri__latest-results, 
+.veri__ticker li[constituency-link] {
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 250ms;
+    border: 1px solid transparent;
+    padding-left: 2px;
+    &:hover {
+        background-color: #fefefe;
+        border: 1px solid #e7e7e7;
+        transition: none;
+    }
+}
+
+.veri__left-pane,
+.veri__right-pane {
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.veri__left-pane {
+    padding-right: 10px;
+}
+
+#content-meta p {
+    color: #767676;
+    font-family: "Guardian Text Egyptian Web",Georgia,serif;
+    font-size: 18px;
+    max-width: 450px;
+}
+
+#dropdown {
+    padding-top: 12px;
+}
+
+@media (max-width: 600px) {
+
+    .veri__right-pane {
+        float: none;
+        width: 100%;
+    }
+
+    .veri__left-pane {
+        float: none;
+        width: 100%;
+    }
+
+}
+
+@media (min-width: 1300px) {
+
+    .veri__right-pane {
+        width: 60%;
+    }
+
+    .veri__left-pane {
+        width: 40%;
+    }
+
+}
+
+.timeslider {
+    width: 100%;
+}

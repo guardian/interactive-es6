@@ -1,0 +1,12 @@
+<div class="seatstack">
+    <div class="seatstack__majority"><strong>326 seats</strong> for a majority</div>
+    <ul>
+        {% for data in seatstack %}
+        {% if data.seats > 0 %}
+        <li data-partyname="{{data.name}}" style="width: {{(data.seats/650)*100}}%">
+            <span>{{data.seats}}</span>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</div>

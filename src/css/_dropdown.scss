@@ -1,0 +1,60 @@
+.edd {
+	positition: relative;
+}
+.edd__input {
+	font-size: 14px;
+	width: 100%;
+	max-width: 450px;
+	height: 35px;
+	box-sizing: border-box;
+	border: 1px solid #dfdfdf;
+	border-radius: 30px;
+	padding: 0 10px;
+
+	outline: none;
+}
+
+.edd__entry--focus {
+	background-color: #ddd;
+}
+.edd__entry {
+	cursor: pointer;
+	padding: 3px 10px 0 10px;
+}
+
+.edd__dropdown {
+	max-width: 450px;
+	box-sizing: border-box;
+	border: 1px solid #dfdfdf;
+	border-top: none;
+	position: relative;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	padding-top: 6px;
+	position: absolute;
+	background-color: white;
+	width: 100%;
+
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-size: 14px;
+
+}
+.edd__dropdown:before {
+	position: absolute;
+	content: '';
+	left: -1px;
+	border-left: 1px solid #dfdfdf;
+	height: 20px;
+	top: -20px;
+}
+.edd__dropdown:after {
+	position: absolute;
+	content: '';
+	right: -1px;
+	border-left: 1px solid #dfdfdf;
+	height: 20px;
+	top: -20px;
+}
+.edd__entry--info {
+	color: #767676;
+}

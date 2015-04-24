@@ -1,0 +1,208 @@
+#ukcartogram {
+	position: relative;
+	width: 100%;
+	height: 400px;
+}
+
+.cartogram {
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+	* {
+		cursor: pointer;
+	}
+}
+
+.cartogram__hexgroup {
+	stroke: #fff;
+	stroke-opacity: 0.3;
+	fill-opacity: 0.8;
+}
+
+.cartogram__regiongroup {
+	fill: none;
+	stroke: #999;
+}
+
+
+.cartogram[party-highlight] {
+	.cartogram__hex {
+    	fill-opacity: 0.3;
+    }
+	.cartogram__regiongroup {
+		stroke-opacity: 0.3;
+	}
+}
+
+@each $party, $color in $partyColors {
+    .cartogram__hex--#{$party} {
+        fill:$color;
+    }
+    .cartogram[party-highlight='#{$party}'] .cartogram__hex--#{$party} {
+        fill-opacity: 0.9;
+        stroke-opacity: 0.5;
+    }
+}
+
+.cartogram[latest-results] {
+	.cartogram__hex {
+		fill-opacity: 0.3;
+	}
+	.cartogram__hex--latest {
+		fill-opacity: 0.9
+	}
+}
+
+.cartogram__hex--pending {
+	stroke: #999;
+	opacity: 0.7;
+}
+.cartogram[focus-constituency] {
+	.cartogram__hex {
+		fill-opacity: 0.3;
+	}
+	.cartogram__hex--focus {
+		fill-opacity: 0.9;
+	}
+}
+
+
+.cartogram__label {
+  text-anchor: middle;
+  stroke-width: 0.2;
+  font-family: "Guardian Text Sans Web","Agate Sans",sans-serif;
+  fill: #FFF;
+  font-size: 16px;
+  opacity: 1;
+}
+
+.cartogram__label--city {
+  font-size: 12px;
+}
+
+.cartogram__label--below {
+  stroke: #000;
+  opacity: 0.25;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.cartogram__city {
+  fill: #333;
+  stroke: none;	
+}
+
+.cartogram__hex--focus {
+	stroke: #333;
+	stroke-width: 1.5;
+	stroke-opacity: 1;
+}
+
+.cartogram__hex--selected {
+	stroke: #333;
+	stroke-width: 2;
+	stroke-opacity: 1;
+}
+
+.cartogram__reset-zoom {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 12px;
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	background-color: #f1f1f1;
+	color: #333;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 10px;
+	border-radius: 30px;
+	box-sizing: border-box;
+	text-decoration: none;
+	display: block;
+	cursor: pointer;
+	&:hover {
+		background-color: #ddd;
+	}
+}
+
+.cartogram[zoomed] {
+	border-left: 1px solid #eee;
+}
+
+.cartogram__tooltip {
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	width: 120px;
+	padding: 5px;
+	margin-left: 25px;
+	background: rgba(255,255,255,0.9);
+	border: 1px solid #ddd;
+	position: absolute;
+	pointer-events: none;
+	visibility: hidden;
+	box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.30);
+}
+
+.cartogram__tooltip h4 {
+	font-family: "Guardian Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+}
+
+.cartogram__tooltip p {
+	font-size: 11px;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+.cartogram__tooltip__tap2expand {
+	font-style: italic;
+	font-size: 11px;
+	color: #767676;
+}
+
+.cartogram__tooltip:after,
+.cartogram__tooltip:before {
+	top: 50%;
+	right: 100%;
+	border: solid transparent;
+	content: '';
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.cartogram__tooltip:before { // outside
+	border-width: 9px;
+	margin-top: -9px;
+	border-right-color: #ddd;
+
+}
+
+.cartogram__tooltip:after { // inside
+	border-width: 8px;
+	margin-top: -8px;
+  	border-right-color: rgba(255,255,255,0.9);
+}
+
+.cartogram__tooltip--left {
+	margin-left: -25px;
+}
+
+.cartogram__tooltip--left:before,
+.cartogram__tooltip--left:after {
+	left: 100%;
+	right: auto;
+}
+
+.cartogram__tooltip--left:before {
+	border-left-color: #ddd;
+	border-right-color: transparent;
+}
+
+.cartogram__tooltip--left:after {
+  	border-left-color: rgba(255,255,255,0.9);
+	border-right-color: transparent;
+}
