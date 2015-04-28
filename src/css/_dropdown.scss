@@ -1,3 +1,18 @@
+#dropdown2 {
+	margin: 10px 0;
+
+	@include mq(tablet) {
+		display: none;
+	}
+}
+
+#dropdown1 {
+	@include mq($until: tablet) {
+		display: none;
+	}
+}
+
+
 .edd {
 	positition: relative;
 }
@@ -5,13 +20,17 @@
 	font-size: 14px;
 	width: 100%;
 	max-width: 450px;
-	height: 35px;
 	box-sizing: border-box;
 	border: 1px solid #dfdfdf;
 	border-radius: 30px;
 	padding: 0 10px;
-
 	outline: none;
+	line-height: 25px;
+
+	@include mq(tablet) {
+		line-height: 35px;
+	}
+	
 }
 
 .edd__entry--focus {
@@ -34,6 +53,7 @@
 	position: absolute;
 	background-color: white;
 	width: 100%;
+	z-index: 1;
 
 	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
 	font-size: 14px;

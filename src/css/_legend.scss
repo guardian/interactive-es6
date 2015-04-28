@@ -1,0 +1,136 @@
+.veri__overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background: #fff;
+	z-index: 100;	
+	box-shadow: 1px 2px 10px rgba(0,0,0,0.1);
+
+	.veri__subnav {
+		float: left;
+	}
+	.veri__legend {
+		float: right;
+	}
+
+	@include mq(desktop) {
+		display: none;
+	}
+}
+
+.veri__overlay-content {
+	max-width: 1340px;
+	box-sizing: border-box;
+	margin: auto;
+	padding-top: 6px;
+	padding-bottom: 4px;
+
+	padding-left: 10px;
+	padding-right: 10px;
+	@include mq(tablet) {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	&:after {
+		content: '';
+		clear: both;
+		display: block;
+	}
+}
+
+.veri__subnav {
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	@include mq(tablet) {
+		font-size: 16px;
+	}
+
+	a {
+		color: #333;
+		text-decoration: none;
+	}
+
+	li {
+		display: inline-block;
+		margin-right: 20px;
+		width: auto;
+	}
+
+	@include mq(desktop) {
+		&:before {
+			content: 'Menu';
+		}
+	}
+}
+
+.veri__legend {
+	list-style-type: none;
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+	li {
+		display: inline-block;
+		width: 20%;
+		@include mq(desktop) {
+			margin-right: 6px;
+		}
+		
+	}
+	@include mq(tablet) {
+		font-size: 14px;
+	}
+	@include mq(desktop) {
+		&:before {
+			content: 'Legend';
+		}		
+	}
+}
+
+#show-legend {
+	display: none;
+
+	& + label {
+		margin-top: -2px;
+		@include button();
+		@include button-height(20px);
+
+		&:before {
+			content: 'Show legend';
+			display: block;
+		}
+	}
+
+	&:checked + label {
+		color: #fff;
+        background-color: #005689;
+        border-color: #005689;
+		margin-bottom: 2px;
+		&:before {
+			content: 'Hide legend';
+			display: block;
+		}
+	}
+
+	& + label + #legend1 {
+		display: none;
+	}
+	&:checked + label + #legend1 {
+		display: block;
+	}
+
+}
+
+.veri__subnav:before, 
+.veri__legend:before {
+	font-family: 'Guardian Egyptian Web','Egyptian Display', Georgia,serif;
+	display: inline-block;
+	padding-right: 20px;
+	margin-right: 20px;
+	border-right: 1px solid #333;
+	font-weight: bold;
+}

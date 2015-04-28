@@ -7,11 +7,11 @@ var s3prefix = 'http://interactive.guim.co.uk/2015/general-election/postcodes/';
 function isPostcode(val) { return /[0-9]/.test(val); }
 
 export class Dropdown {
-    constructor(opts) {
+    constructor(el, opts) {
         this.constituenciesById = {};
         initEdd({
-            el: opts.el,
-            onChange: function(a,b) { this.onChange(a,b) }.bind(this),
+            el: el,
+            onChange: this.onChange.bind(this),
             onSelect: opts.onSelect,
             onFocus: opts.onFocus, 
             onKeyDown: opts.onKeyDown,

@@ -1,23 +1,39 @@
-<div class="veri">
+<div class="veri veri--loading veri--map">
 
 
     <div id="timeslider"></div>
 
+    <div class="veri__overlay">
+        <div class="veri__overlay-content">
+            <ul class="veri__subnav">
+                <li><a href="#seatstack">Parliament</a></li>
+                <li><a href="#ukcartogram">Map</a></li>
+                <li><a href="#latest-results">Latest</a></li>
+            </ul>
+            <input id="show-legend" type="checkbox"><label for="show-legend"></label>
+            <div id="legend1">
+                
+            </div>
+        </div>
+    </div>
+
     <div id="seatstack"></div>
+
+    <div class="veri__right-pane">
+        <div id="dropdown2"></div>
+        <div id="ukcartogram-container">
+            <div id="ukcartogram" class="cartogram"></div>
+        </div>
+    </div>
 
     <div class="veri__left-pane">
         <div id="content-meta"></div>
-        <h2 class="veri__latest-results">Latest results</h2>
+        <h2 id="latest-results" class="veri__latest-results">
+            Latest <ul id="latest-filter"></ul>
+        </h2>
         <div id="ticker"></div>
-        <div id="dropdown"></div>
+        <div id="dropdown1"></div>
         <div id="constituency-details"></div>
-    </div>
-
-    <div class="veri__right-pane">
-        <div id="ukcartogram-container">
-        	<div id="ukcartogram" class="cartogram"></div>
-        </div>
-        
     </div>
     
 </div>

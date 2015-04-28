@@ -10,16 +10,15 @@
 	  }
 	};
 
-
 	return function(opts) {
 		// el - some div to create the input box in
-		// onChange - takes the new value and returns a promise that resolves to an array
-		// onSelect - once the user selects
+		// onChange - when user changes the value in the input box (e.g. types)
+		// onSelect - when user selects an option
+		// onFocus - when user focuses an option (e.g. hover / arrow keys)
 
 		var dropdown, input, focusElement, lastVal = '', touchstart;
 
 		function renderDropdown(arr,selectIndex) {
-			setFocusElement(null);
 			if (arr.length > 0) {
 
 				var htmls = arr.map(function(entry,i) { 
@@ -33,6 +32,7 @@
 				}					
 			} else {
 				dropdown.style.display = 'none';
+				setFocusElement(null);
 			}
 		}
 
@@ -52,6 +52,7 @@
 		function onInputKeyUp(event) {
 			var newVal = event.target.value;
 			if (lastVal !== newVal && event.keyCode !== 13) {
+				console.log('onchange');
 				renderDropdown([]);
 				opts.onChange(event.target.value, renderDropdown)
 				lastVal = newVal;
@@ -83,6 +84,7 @@
 			}
 
 			if (newFocusElement) {
+				dropdown.style.display = '';
 				setFocusElement(newFocusElement);
 			}
 
@@ -124,8 +126,8 @@
 		dropdown.addEventListener('mousedown', onDropdownClick);
 		dropdown.addEventListener('mouseover', onDropdownMouseOver); 
 
-		dropdown.addEventListener('touchstart', onDropdownMouseOver);
-		dropdown.addEventListener('touchend', onDropdownClick);
+		// dropdown.addEventListener('touchstart', onDropdownClick);
+		// dropdown.addEventListener('touchend', onDropdownClick);
 
 		opts.el.appendChild(input);
 		opts.el.appendChild(dropdown);

@@ -1,0 +1,42 @@
+@mixin button() {
+    display: inline-block;
+    vertical-align: top;
+    width: auto;
+    text-decoration: none;
+    -webkit-border-radius: 1000px;
+    border-radius: 1000px;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    @include fs-textSans(2);
+    @include button-colour(#f6f6f6, #333, #ddd, #ddd, #f6f6f6);
+}
+
+
+@mixin button-colour(
+    $fill-colour,
+    $text-colour,
+    $hover-colour,
+    $hover-border: $hover-colour,
+    $border-color: $fill-colour
+) {
+    color: $text-colour;
+    background-color: $fill-colour;
+    border-color: $border-color;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $hover-colour;
+        border-color: $hover-border;
+    }
+}
+
+@mixin button-height($button-size) {
+    height: $button-size;
+    padding: 0 ($button-size / 3);
+    margin-right: $button-size / 3;
+    line-height: $button-size - 2px;
+}

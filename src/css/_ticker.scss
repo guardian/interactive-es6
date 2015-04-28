@@ -1,0 +1,80 @@
+.veri__ticker {
+    list-style-type: none;
+    padding: 0;
+
+    font-family: "Guardian Agate Sans 1 Web","Agate Sans",sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    color: #333;
+
+    .veri__relative-date {
+        display: inline-block;
+        width: 116px;
+    }
+
+    @include mq($until: tablet) {
+        font-size: 13px;
+        .veri__relative-date {
+            display: none;
+        }
+    }
+
+}
+// .veri__latest-results, 
+.veri__ticker li[constituency-link] {
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 250ms;
+    border: 1px solid transparent;
+    padding-left: 2px;
+    &:hover {
+        background-color: #fefefe;
+        border: 1px solid #e7e7e7;
+        transition: none;
+    }
+}
+
+.veri__latest-results {
+    height: 22px;
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 12px 0;
+
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: inline;
+        padding-left: 5px;
+        line-height: 22px;
+        white-space:: normal;
+    }
+    li {
+        display: inline-block;
+    }
+
+    input {
+        display: none;
+    }
+    label {
+        cursor: pointer;
+
+        @include button();
+
+        @include button-height(20px);
+
+        &:hover {
+            color: #333;    
+        }
+    }
+    input:checked + label {
+        background-color: #005689;
+        border-color: #005689;
+        color: #fff;
+    }
+    li:first-child label {
+        margin-left: 4px;
+    }
+
+}

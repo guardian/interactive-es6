@@ -49,7 +49,7 @@ module.exports = function(grunt) {
             'harness': {
                 'options': {
                     'data': {
-                        'assetPath': 'http://localhost:8000',
+                        'assetPath': '',
                     }
                 },
                 'files': {
@@ -62,7 +62,7 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html'], dest: 'build'}
+                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html', 'mega.json'], dest: 'build'}
                 ]
             }
         },
@@ -79,6 +79,7 @@ module.exports = function(grunt) {
         connect: {
             server: {
                 options: {
+                    hostname: '0.0.0.0',
                     port: 8000,
                     base: 'build'
                 }

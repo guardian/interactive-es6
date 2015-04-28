@@ -1,8 +1,18 @@
 <h2>{{ constituency.name }}</h2>
 
+<div class="veri__close-details">
+	<svg viewBox="0 0 33.2 33.2">
+		<g>
+			<polygon points="2.1,0 0,2.1 14.8,18.4 31.4,32.9 33.2,31.1 18.4,14.8 "/>
+			<polygon points="0,31.1 2.1,33.2 18.4,18.4 33.2,2.1 31.1,0 14.8,14.8 "/>
+		</g>
+	</svg>
+</div>	
+
 <h3>Result</h3>
 {% if constituency['2015'].winningParty %}
-	<span class="veri__blip veri__blip--{{ constituency['2015'].winningParty | lower }}"></span>{{ constituency['2015'].winningParty }} wins
+	<span class="veri__blip veri__blip--{{ constituency['2015'].winningParty | lower }}"></span>
+	{{ constituency['2015'].winningParty }} wins
 {% else %}
 Result pending
 {% endif %}

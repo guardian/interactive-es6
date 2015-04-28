@@ -1,9 +1,8 @@
-import hexagonsTopo from '../carto/data/hexagons-topo.json!json'
-import regionsTopo from '../carto/data/regions-topo.json!json'
+import hexagonsTopo from '../data/hexagons-topo.json!json'
+import regionsTopo from '../data/regions-topo.json!json'
 import topojson from 'mbostock/topojson'
 import d3 from 'd3'
 import textures from 'riccardoscalco/textures'
-
 
 d3.selection.prototype.moveToFront = function() {
     return this.each(function(){
@@ -14,18 +13,21 @@ d3.selection.prototype.moveToFront = function() {
 var getDist = (x1,y1,x2,y2) => Math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
 
 export class UKCartogram {
-    constructor(el, selectConstituencyCallback) {
-        window.c = this;
+    constructor(el, opts) {
+
+
+        this.initOptions(opts);
         this.el = el;
         this.svg = d3.select(el).append("svg");
         this.map = this.svg.append('g');
-        this.selectConstituencyCallback = selectConstituencyCallback;
+        this.selectConstituencyCallback = this.opts.selectCallback;
 
         this.el.style.height = parseInt(window.innerHeight * 0.9, 10) + 'px';
 
         this.resetZoom();
         this.renderHex();
         this.renderRegions();
+        this.focusHexGroup = this.map.append('g')
         this.project();
         this.initButtons();
         this.initEventHandling();
@@ -33,6 +35,18 @@ export class UKCartogram {
         var self = this;
         window.foo = (t,s) => self.setTransform(t,s)
         window.bar = () => self.initProjection()
+    }
+
+    initOptions(opts) {
+        var defaultOpts = {
+            mouseBindings: true,
+            selectCallback: () => false, // no-op
+            tooltipCallback: () => false, // no-op
+            bigTooltips: false,
+        }
+
+        this.opts = {}
+        Object.keys(defaultOpts).forEach(k => this.opts[k] = opts[k] !== undefined ? opts[k] : defaultOpts[k])
     }
 
     project() { // do projections separately so we can rerender
@@ -57,37 +71,62 @@ export class UKCartogram {
             .translate([elDimensions.width / 2, elDimensions.height / 2])
             .center([0, 54.1])
             .rotate([2,0])  
-            .precision(.1);
+            .precision(10.0);
         if (!this.path) this.path = d3.geo.path();
         this.path.projection(this.projection)
     }
 
     renderTooltip(constituencyId) {
+        this.tooltipConstituency = constituencyId;
         if (!this.tooltip) {
             var tooltip = '<div class="cartogram__tooltip"></div>';
             this.el.insertAdjacentHTML('beforeend', tooltip);
             this.tooltip = this.el.querySelector('.cartogram__tooltip');
+            this.tooltip.addEventListener('click', (evt) => this.opts.tooltipCallback(this.tooltipConstituency))
         }
         
         if (!this.constituenciesById) return; // no data yet
 
         var c = this.constituenciesById[constituencyId];
-        var msg = c['2015'].winningParty ? 
-            `<strong>${c['2015'].winningParty}</strong> wins` :
-            'Result pending';
+
+        var msg;
+        if (c['2015'].winningParty) {
+            var partyName = (party) => 
+                `<span class="veri__blip veri__blip--${party.toLowerCase()}"></span>` +
+                `<strong>${party}</strong>`
+
+            var e = c['2015']
+
+            var verb = e.winningParty === e.sittingParty ? 'holds' : 'gains';
+            var fromParty = verb === 'gains' ? ` from ${partyName(e.sittingParty)}` : '';
+            var how = e.percentageMajority ? `with a ${e.percentageMajority}% majority` : '';
+
+            msg = `<p>${partyName(e.winningParty)} ${verb}${fromParty} ${how}</p>`
+        } else {
+            msg = '<p>Result pending</p>'
+        }
 
         this.tooltip.innerHTML = 
-            `<h4>${c.name}</h4><p>${msg}</p>` +
-            '<span class="cartogram__tooltip__tap2expand">Tap here to select</span>';
+            `<h4>${c.name}</h4>${msg}` +
+            '<span class="cartogram__tooltip__tap2expand">Click here for details</span>';
 
         var rect = this.tooltip.getBoundingClientRect();
         var centroid = this.hexCentroids[constituencyId];
         var coords = this.mapCoordsToScreenCoords(centroid);
         this.tooltip.style.visibility = 'visible';
-        var leftHandSide = coords[0] > (this.elDimensions.width / 2);
-        this.tooltip.style.left = (leftHandSide ? coords[0]-rect.width : coords[0]) +'px';
-        this.tooltip.style.top = (coords[1] - (rect.height / 2)) + 'px';
-        this.tooltip.className = 'cartogram__tooltip' + (leftHandSide ? ' cartogram__tooltip--left' : '');
+        
+        if (this.opts.bigTooltips) {
+            var topSide = coords[1] > (this.elDimensions.width / 2);
+            this.tooltip.style.top = (topSide ? coords[1]-rect.height : coords[1]) + 'px';
+            this.tooltip.style.left = (coords[0] - (rect.width / 2)) + 'px';
+            this.tooltip.className = 'cartogram__tooltip' + (topSide ? ' cartogram__tooltip--top' : ' cartogram__tooltip--bottom');
+        } else {
+            var leftHandSide = coords[0] > (this.elDimensions.width / 2);
+            this.tooltip.style.left = (leftHandSide ? coords[0]-rect.width : coords[0]) +'px';
+            this.tooltip.style.top = (coords[1] - (rect.height / 2)) + 'px';
+            this.tooltip.className = 'cartogram__tooltip' + (leftHandSide ? ' cartogram__tooltip--left' : '');
+        }
+        
     }
 
     hideTooltip() {
@@ -97,11 +136,15 @@ export class UKCartogram {
     renderHex() {
         this.hexFeatures = topojson.feature(hexagonsTopo, hexagonsTopo.objects.hexagons).features
         this.hexGroup = this.map.append('g').attr('class', 'cartogram__hexgroup')
-        this.hexPaths = this.hexGroup
-            .selectAll("path")
-            .data(this.hexFeatures)
-            .enter().append("path")
-            // .attr("d", this.path)
+        this.hexPaths = this.hexGroup.selectAll("path")
+                                .data(this.hexFeatures)
+        // window.setTimeout(function() {
+            this.hexPaths
+                .enter().append("path")
+                .attr("d", this.path)
+            if (this.lastRenderedData) this.render(this.lastRenderedData);
+
+        // }.bind(this), 300)
 
         // this.hexCentroids = {}
         // this.hexPaths.each(d => this.hexCentroids[d.properties.constituency] = this.path.centroid(d));
@@ -169,27 +212,28 @@ export class UKCartogram {
 
     initButtons() {
         var controls = document.createElement('div');
-        var resetButton = '<div class="cartogram__reset-zoom">Reset zoom</div>';
+        var resetButton = '<div class="cartogram__reset-zoom"></div>';
         controls.innerHTML = resetButton;
         this.el.appendChild(controls)
 
         controls.querySelector('.cartogram__reset-zoom')
-            .addEventListener('click', this.resetZoom.bind(this));
+            .addEventListener('click', function() { this.resetZoom(); this.selectConstituency(null); }.bind(this) );
     }
 
     initEventHandling() {
         var self = this;
 
-        this.svg.on('mousemove',function(){
-                var coords = d3.mouse(this);
-                var mouseConstituency = self.coordsToClosestConstituency(coords);
-                self.focusConstituency(mouseConstituency);
-        })
+        if (this.opts.mouseBindings) {
+            this.svg.on('mousemove',function(){
+                    var coords = d3.mouse(this);
+                    var mouseConstituency = self.coordsToClosestConstituency(coords);
+                    self.focusConstituency(mouseConstituency);
+            })
 
-        this.svg.on('mouseout', () => this.blurConstituency())
-        this.svg.on('mouseleave', () => this.hideTooltip())
+            this.svg.on('mouseleave', function() { this.blurConstituency(); this.hideTooltip(); }.bind(this))
+        }
 
-        this.svg.on("mousedown",function(){
+        this.svg.on("click",function(){
             var coords = d3.mouse(this);
             var constituency = self.coordsToClosestConstituency(coords);
             self.selectConstituency(constituency);
@@ -213,26 +257,45 @@ export class UKCartogram {
     }
 
     focusConstituency(constituencyId) {
+        if (this.focusedConstituency === constituencyId) return;
+
+        this.blurConstituency();
+
         this.focusedConstituency = constituencyId;
         if (!constituencyId) return this.blurConstituency();
 
+        var focusHexGroupEl = this.focusHexGroup[0][0];
         this.hexPaths
-            .classed('cartogram__hex--focus', false )
+            // .classed('cartogram__hex--focus', false )
             .filter(d => d.properties.constituency === constituencyId)
-            .classed('cartogram__hex--focus', true)
-            .moveToFront()
+            // .classed('cartogram__hex--focus', true)
+            .each(function() { 
+                var clone = this.cloneNode();
+                clone.setAttribute('class', clone.getAttribute('class') + ' cartogram__hex--focus');
+                focusHexGroupEl.appendChild(clone); 
+            })
 
         this.renderTooltip(constituencyId);
     }
 
     blurConstituency() {
+        console.log('blur');
+        var focusHexGroupEl = this.focusHexGroup[0][0];
         this.focusedConstituency = null;
-        this.hexPaths.classed('cartogram__hex--focus', false)
+        this.hexPaths
+            .each(function() { focusHexGroupEl.innerHTML = ''; } )
         this.hideTooltip();
     }
 
+    setLatest(constituencyIds) {
+        this.hexPaths
+            .classed('cartogram__hex--latest', false)
+            .filter(d => constituencyIds.indexOf(d.properties.constituency) !== -1)
+            .classed('cartogram__hex--latest', true);
+
+    }
+
     selectConstituency(constituencyId) {
-        this.zoomToConstituency(constituencyId);
         this.selectConstituencyCallback(constituencyId);
     }
 
@@ -264,6 +327,8 @@ export class UKCartogram {
     resetZoom() {
         this.el.removeAttribute('zoomed');
         this.setTransform([0,0], [1,1])
+        this.hexPaths && this.hexPaths.classed('cartogram__hex--selected', false )
+
     }
 
     setTransform(translate, scale) {
@@ -277,6 +342,7 @@ export class UKCartogram {
     }
 
     render(data) {
+        this.lastRenderedData = data;
         var constituenciesById = this.constituenciesById = {};
         data.constituencies.forEach(c => constituenciesById[c.ons_id] = c)
 
@@ -301,11 +367,6 @@ export class UKCartogram {
                 var constituency = constituenciesById[d.properties.constituency];
                 return 'cartogram__hex cartogram__hex--' + (constituency['2015'].winningParty || 'pending').toLowerCase();
             });
-
-        var latestIds = data.overview.latestInteresting.map(e => e.id)
-        this.hexPaths
-            .filter(d => latestIds.indexOf(d.properties.constituency) !== -1)
-            .classed('cartogram__hex--latest', true);
 
         var alternate = 0;
         this.hexPaths

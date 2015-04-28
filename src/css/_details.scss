@@ -9,6 +9,16 @@
 	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
 	font-size: 14px;
   	max-width: 450px;
+  	position: relative;
+
+	@include mq($until: tablet) {
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: rgba(246,246,246, 0.95);
+	}
 
 	h2 {
 		font-family: "Guardian Text Egyptian Web",Georgia,serif;
@@ -36,4 +46,21 @@
 
 .veri__details--show {
 	max-height: 450px;
+
+	@include mq($until: tablet) {
+		max-height: 100%;
+	}
+}
+
+.veri__close-details {
+  width: 24px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  fill: #999;
+  &:hover {
+  	fill: #767676;
+  }
+
 }

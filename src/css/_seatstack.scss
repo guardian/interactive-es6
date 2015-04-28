@@ -27,7 +27,10 @@
     padding: 0;
     margin: 0;
     list-style-type: none;
-    height: 50px;
+    height: 30px;
+    @include mq(tablet) {
+        height: 50px;
+    }
 
     li {
       float: left;
@@ -37,9 +40,12 @@
       span {
         position: absolute;
         top: -20px;
-        font-size: 16px;
         left: -50px;
         right: -50px;
+        font-size: 15px;
+        @include mq(tablet) {
+            font-size: 16px;
+        }
       }
     }
 
@@ -47,8 +53,10 @@
         span { bottom: -20px; top: auto; }
     }
 
-    li:hover {
-        -webkit-filter: brightness(90%);
-        filter: brightness(0.9);
+    @include mq(tablet) {
+        li:hover {
+            -webkit-filter: brightness(90%);
+            filter: brightness(0.9);
+        }        
     }
 }
