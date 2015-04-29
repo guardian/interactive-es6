@@ -92,7 +92,8 @@
 		}
 
 		function onDropdownClick(event) {
-			var value = event.target.getAttribute('data-val');
+			console.log(event);
+			var value = event.target.getAttribute('data-val') || event.target.parentElement.getAttribute('data-val');
 			if (value !== 'null') {
 				input.value = event.target.textContent;
 				renderDropdown([]);

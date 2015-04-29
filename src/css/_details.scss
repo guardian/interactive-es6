@@ -1,23 +1,23 @@
 .veri__details {
 	background-color: #f6f6f6;
 	box-sizing: border-box;
-	margin-top: 30px;
+	margin-top: 40px;
 	padding: 0 10px;
 	overflow: hidden;
 	max-height: 0;
 	transition: max-height 200ms;
 	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
 	font-size: 14px;
-  	max-width: 450px;
-  	position: relative;
+	max-width: 450px;
+	position: relative;
 
 	@include mq($until: tablet) {
-	  position: fixed;
-	  top: 0;
-	  left: 0;
-	  right: 0;
-	  bottom: 0;
-	  background-color: rgba(246,246,246, 0.95);
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(246,246,246, 0.95);
 	}
 
 	h2 {
@@ -53,14 +53,18 @@
 }
 
 .veri__close-details {
-  width: 24px;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  cursor: pointer;
-  fill: #999;
-  &:hover {
-  	fill: #767676;
-  }
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	cursor: pointer;
+	fill: #999;
+	&:hover {
+		fill: #767676;
+	}
+	width: 36px;
+
+	@include mq(tablet) {
+		width: 24px;
+	}
 
 }

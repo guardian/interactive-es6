@@ -262,7 +262,7 @@ export class UKCartogram {
         this.blurConstituency();
 
         this.focusedConstituency = constituencyId;
-        if (!constituencyId) return this.blurConstituency();
+        if (!constituencyId) return;
 
         var focusHexGroupEl = this.focusHexGroup[0][0];
         this.hexPaths
@@ -328,11 +328,15 @@ export class UKCartogram {
     resetZoom() {
         this.el.removeAttribute('zoomed');
         this.setTransform([0,0], [1,1])
-        this.hexPaths && this.hexPaths.classed('cartogram__hex--selected', false )
-
+        this.hexPaths && this.hexPaths.classed('cartogram__hex--selected', false)
     }
 
     setTransform(translate, scale) {
+
+        if (this.translate && this.scale &&
+            this.translate[0] === translate[0] && this.translate[1] === translate[1] &&
+            this.scale[0] === scale[0] && this.scale[1] === scale[1]) return;
+
         this.translate = translate;
         this.scale = scale;
 

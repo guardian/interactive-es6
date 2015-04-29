@@ -207,14 +207,17 @@
 .cartogram__tooltip__tap2expand {
 	font-style: italic;
 	font-size: 12px;
-	color: #767676;
 	line-height: 18px;
 	margin-top: 6px;
 	&:before {
-		content: 'Click this bubble for more details';
+		content: 'More details »';
 		display: block;
+		color: #005689;
+		text-decoration: underline;
 		@include mq(tablet) {
 			content: 'Click for details';
+			color: #767676;
+			text-decoration: none;
 		}
 	}
 

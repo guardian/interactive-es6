@@ -8,6 +8,7 @@ function isPostcode(val) { return /[0-9]/.test(val); }
 
 export class Dropdown {
     constructor(el, opts) {
+        this.el = el;
         this.constituenciesById = {};
         initEdd({
             el: el,

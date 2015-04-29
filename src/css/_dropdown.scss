@@ -25,12 +25,7 @@
 	border-radius: 30px;
 	padding: 0 10px;
 	outline: none;
-	line-height: 25px;
-
-	@include mq(tablet) {
-		line-height: 35px;
-	}
-	
+	line-height: 35px;
 }
 
 .edd__entry--focus {
@@ -38,6 +33,7 @@
 }
 .edd__entry {
 	cursor: pointer;
+	line-height: 26px;
 	padding: 3px 10px 0 10px;
 }
 

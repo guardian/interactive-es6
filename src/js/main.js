@@ -36,6 +36,8 @@ function removeClass(el, className) {
 	else el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 }
 
+function freezeScroll(e) { e.preventDefault(); }
+
 class ElectionResults {
 	constructor(el, dataUrl) {
 		this.el = el;
@@ -54,7 +56,7 @@ class ElectionResults {
 		this.cartogramEl = el.querySelector('#ukcartogram')
 
 		var dropdownOpts = {
-			onSelect: isMobile() ? this.focusConstituency.bind(this) : this.selectConstituency.bind(this),
+			onSelect: this.selectConstituency.bind(this),
 			onFocus: isMobile() ? () => false : this.focusConstituency.bind(this),
 			onKeyDown: evt => evt.keyCode === 27 && this.deselectConstituency()
 		}
@@ -158,17 +160,35 @@ class ElectionResults {
 			this.components.cartogram.zoomToConstituency(constituencyId);
 			this.components.details.selectConstituency(constituencyId);
 		} else {
-			this.focusConstituency(constituencyId);
+			this.scrollAndFocus(constituencyId)
+			// this.focusConstituency(constituencyId);
 		}
+	}
+
+	freezeScrolling() {
+		window.addEventListener('touchmove', freezeScroll);
+	}
+
+	resumeScrolling() {
+		window.removeEventListener('touchmove', freezeScroll);
 	}
 
 	cartogramTooltipClick(constituencyId) {
 		this.components.details.selectConstituency(constituencyId);
+		this.freezeScrolling();
 	}
 
 	hoverConstituency(constituencyId) {		
 		if (!isMobile() && constituencyId) this.cartogramEl.setAttribute('party-highlight', constituencyId);
 		else this.cartogramEl.removeAttribute('party-highlight')
+	}
+
+	scrollAndFocus(constituencyId) {
+		var cartEl = this.components.cartogram.el;
+		var mapCenter = cartEl.offsetTop + (cartEl.offsetHeight / 2);
+		var windowCenter = window.innerHeight / 2;
+		window.scrollTo(null, mapCenter - windowCenter - 50);
+		this.focusConstituency(constituencyId);
 	}
 
 	focusConstituency(constituencyId) {
@@ -194,9 +214,12 @@ class ElectionResults {
 		latestResults.addEventListener('mouseout', () => this.cartogramEl.removeAttribute('latest-results') )
 
 		bean.on(this.components.details.el, 'click', '.veri__close-details', function() {
+			this.resumeScrolling();
 			this.components.details.hide();
-			this.components.cartogram.resetZoom();
-			if (!isMobile()) this.blurConstituency();
+			if (!isMobile()) {
+				this.components.cartogram.resetZoom();
+				this.blurConstituency();
+			}
 		}.bind(this));
 
 	}
