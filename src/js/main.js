@@ -97,31 +97,32 @@ class ElectionResults {
 		var data = data || this.lastFetchedData;
 		var filter = filter || this.getLatestFilterValue();
 		var filterFn = this.tickerFilters[filter];
-		return filterFn ? filterFn(data) : data.overview.latestInteresting.slice(0,5);
+		return filterFn ? filterFn(data) : data.overview.latestInteresting.slice(0,20);
 	}
 
 	createLatestFilter() {
 		var self = this;
 		var sortConstituency = (c1,c2) => c1['2015'].updated > c2['2015'].updated ? -1 : 1;
+		var numberOfResults = isMobile() ? 10 : 5;
 
 		this.tickerFilters = {
 			important: data => data.constituencies
 								.filter(isResult)
 								.filter(isImportantConstituency)
-								.sort(sortConstituency).slice(0,5),
+								.sort(sortConstituency).slice(0,numberOfResults),
 			all: data => data.constituencies
 								.filter(isResult)
-								.sort(sortConstituency).slice(0,5),
+								.sort(sortConstituency).slice(0,numberOfResults),
 			marginals: data => data.constituencies
 								.filter(isResult)
 								.filter(isMarginalConstituency)
 								.sort(sortConstituency)
-								.slice(0, 5),
+								.slice(0, numberOfResults),
 			swings: data => data.constituencies
 								.filter(isResult)
 								.filter(isBigSwingWin)
 								.sort(sortConstituency)
-								.slice(0, 5)
+								.slice(0, numberOfResults)
 		}
 
 		var listEl = this.el.querySelector('#latest-filter');
