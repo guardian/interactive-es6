@@ -115,9 +115,17 @@ export class UKCartogram {
         var coords = this.mapCoordsToScreenCoords(centroid);
         this.tooltip.style.visibility = 'visible';
         
-        var topSide = coords[1] > (this.elDimensions.height / 2);
+        var elDimensions = this.elDimensions;
+        var topSide = coords[1] > (elDimensions.height / 2);
         this.tooltip.style.top = (topSide ? coords[1]-rect.height : coords[1]) + 'px';
-        this.tooltip.style.left = (coords[0] - (rect.width / 2)) + 'px';
+        var desiredLeft = (coords[0] - (rect.width / 2));
+        var maxLeft = elDimensions.width - rect.width;
+        var minLeft = 0;
+        var actualLeft = Math.max(minLeft, Math.min(desiredLeft, maxLeft));
+        this.tooltip.style.left = actualLeft + 'px';
+
+        var spoutOffset = Math.min(rect.width - 12, coords[0] - actualLeft);
+        this.tooltip.querySelector('.cartogram__tooltip__spout').style.left = spoutOffset + 'px';
         this.tooltip.className = 'cartogram__tooltip' + (topSide ? ' cartogram__tooltip--above' : ' cartogram__tooltip--below');
     }
 
