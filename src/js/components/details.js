@@ -42,6 +42,7 @@ export class Details {
 	}
 
 	hide() {
+		this.selectedConstituency = null;
 		this.el.className = 'veri__details';
 	}
 }
