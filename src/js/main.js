@@ -222,7 +222,7 @@ class ElectionResults {
 function init(el, context, config, mediator) {		
 
 	var dataUrl = 'mega.json';
-	var dataUrl = 'http://s3.amazonaws.com/gdn-cdn/2015/05/election/datatest/liveresults.json';
+	// var dataUrl = 'http://s3.amazonaws.com/gdn-cdn/2015/05/election/datatest/liveresults.json';
 
 	el.innerHTML = swig.render(tmplMain);
 

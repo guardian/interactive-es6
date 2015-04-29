@@ -31,10 +31,12 @@ export class Details {
 	render(data) {
         var constituenciesById = this.constituenciesById = {};
         data.constituencies.forEach(c => constituenciesById[c.ons_id] = c)
-		this.el.className = 'veri__details';
+        if (this.selectedConstituency) this.selectConstituency(this.selectedConstituency);
+        else this.el.className = 'veri__details';
 	}
 
 	selectConstituency(constituencyId) {
+		this.selectedConstituency = constituencyId;
 		if (constituencyId) this.el.innerHTML = templateFn({constituency: this.constituenciesById[constituencyId]});
 		this.el.className = 'veri__details' + (constituencyId ? ' veri__details--show' : '');
 	}

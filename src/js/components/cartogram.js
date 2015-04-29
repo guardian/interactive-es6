@@ -287,6 +287,7 @@ export class UKCartogram {
     }
 
     setLatest(constituencyIds) {
+        this.selectedLatestIds = constituencyIds;
         this.hexPaths
             .classed('cartogram__hex--latest', false)
             .filter(d => constituencyIds.indexOf(d.properties.constituency) !== -1)
@@ -375,5 +376,7 @@ export class UKCartogram {
                 if (hasResult) d3.select(this).style('fill', '');
                 else d3.select(this).style('fill', () => (alternate++ % 2) ? self.texture.url() : self.texture2.url());
             });
+
+        if (this.selectedLatestIds) this.setLatest(this.selectedLatestIds);
     }
 }
