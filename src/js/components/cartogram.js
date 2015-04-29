@@ -279,7 +279,6 @@ export class UKCartogram {
     }
 
     blurConstituency() {
-        console.log('blur');
         var focusHexGroupEl = this.focusHexGroup[0][0];
         this.focusedConstituency = null;
         this.hexPaths
@@ -342,6 +341,7 @@ export class UKCartogram {
     }
 
     render(data) {
+        var self = this;
         this.lastRenderedData = data;
         var constituenciesById = this.constituenciesById = {};
         data.constituencies.forEach(c => constituenciesById[c.ons_id] = c)
@@ -370,7 +370,10 @@ export class UKCartogram {
 
         var alternate = 0;
         this.hexPaths
-            .filter(d => !constituenciesById[d.properties.constituency]['2015'].winningParty)
-            .style("fill", () => (alternate++ % 2) ? this.texture.url() : this.texture2.url())
+            .each(function(d) {
+                var hasResult = constituenciesById[d.properties.constituency]['2015'].winningParty;
+                if (hasResult) d3.select(this).style('fill', '');
+                else d3.select(this).style('fill', () => (alternate++ % 2) ? self.texture.url() : self.texture2.url());
+            });
     }
 }

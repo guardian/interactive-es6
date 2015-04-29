@@ -10,7 +10,6 @@ import { UKCartogram } from './components/cartogram'
 import { renderCartogram } from './components/cartogram'
 import { Dropdown } from './components/dropdown'
 import { Details } from './components/details'
-
 import { Legend } from './components/legend'
 
 
@@ -44,7 +43,7 @@ class ElectionResults {
 		this.createComponents();
 		this.createLatestFilter();
 		this.initEventHandlers();
-		// window.setInterval(this.fetchDataAndRender.bind(this), 10000);
+		window.setInterval(this.fetchDataAndRender.bind(this), 5000);
 		this.fetchDataAndRender();
 
 		removeClass(this.el.querySelector('.veri'), 'veri--loading')
@@ -223,7 +222,7 @@ class ElectionResults {
 function init(el, context, config, mediator) {		
 
 	var dataUrl = 'mega.json';
-	var dataUrl = 'http://s3.amazonaws.com/gdn-cdn/2015/05/election/data/mega.json';
+	var dataUrl = 'http://s3.amazonaws.com/gdn-cdn/2015/05/election/datatest/liveresults.json';
 
 	el.innerHTML = swig.render(tmplMain);
 
