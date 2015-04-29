@@ -151,8 +151,13 @@
 	border-radius: 30px;
 	box-sizing: border-box;
 	text-decoration: none;
-	display: block;
+	display: none;
 	cursor: pointer;
+
+	.cartogram[zoomed] & {
+		display: block;
+	}
+
 	&:hover {
 		background-color: #ddd;
 	}
