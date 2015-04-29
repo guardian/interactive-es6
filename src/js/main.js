@@ -62,8 +62,7 @@ class ElectionResults {
 		var cartogramOpts = {
 			selectCallback: this.selectConstituency.bind(this), 
 			tooltipCallback: this.cartogramTooltipClick.bind(this), 
-			mouseBindings: !isMobile(),
-			bigTooltips: true
+			mouseBindings: !isMobile()
 		}
 
 		this.components = {

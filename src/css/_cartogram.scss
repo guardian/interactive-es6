@@ -172,34 +172,28 @@
 
 .cartogram__tooltip {
 	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
-	width: 120px;
+	width: 200px;
 	padding: 5px;
-	margin-left: 25px;
 	background: rgba(255,255,255,0.9);
 	border: 1px solid #ddd;
 	position: absolute;
 	visibility: hidden;
 	box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.30);
 
-	@include mq($until: tablet) {
-		width: 240px;
-	}
-
 	@include mq(tablet) {
 		pointer-events: none;
 	}
-	
 }
 
 .cartogram__tooltip h4 {
 	font-family: "Guardian Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
-	font-size: 12px;
+	font-size: 14px;
 	margin: 0;
 	padding: 0;
 }
 
 .cartogram__tooltip p {
-	font-size: 11px;
+	font-size: 12px;
 	margin: 0;
 	padding: 0;
 	color: #000;
@@ -207,8 +201,18 @@
 
 .cartogram__tooltip__tap2expand {
 	font-style: italic;
-	font-size: 11px;
+	font-size: 12px;
 	color: #767676;
+	line-height: 18px;
+	margin-top: 6px;
+	&:before {
+		content: 'Click this bubble for more details';
+		display: block;
+		@include mq(tablet) {
+			content: 'Click for details';
+		}
+	}
+
 }
 
 .cartogram__tooltip__blips {
@@ -216,10 +220,14 @@
 	span { margin-right: 0; }
 }
 
-.cartogram__tooltip:after,
-.cartogram__tooltip:before {
-	top: 50%;
-	right: 100%;
+.cartogram__tooltip__spout {
+	position: absolute;
+	left: 50%;
+	margin-left: -6px;
+}
+
+.cartogram__tooltip__spout:after,
+.cartogram__tooltip__spout:before {
 	border: solid transparent;
 	content: '';
 	height: 0;
@@ -228,35 +236,44 @@
 	pointer-events: none;
 }
 
-.cartogram__tooltip:before { // outside
+.cartogram__tooltip__spout:before { // outside
 	border-width: 9px;
-	margin-top: -9px;
-	border-right-color: #ddd;
-
+	margin-top: -8px;
+	margin-left: -1px;
 }
 
-.cartogram__tooltip:after { // inside
+.cartogram__tooltip__spout:after { // inside
 	border-width: 8px;
 	margin-top: -8px;
-  	border-right-color: rgba(255,255,255,0.9);
 }
 
-.cartogram__tooltip--left {
-	margin-left: -25px;
+.cartogram__tooltip--above {
+	margin-top: -25px;
+	.cartogram__tooltip__spout {
+		margin-top: 8px;
+		top: 100%;
+		&:before { border-top-color: #ddd; }
+		&:after { border-top-color: rgba(255,255,255,0.9); }
+	}
 }
 
-.cartogram__tooltip--left:before,
-.cartogram__tooltip--left:after {
-	left: 100%;
-	right: auto;
+.cartogram__tooltip--below {
+	margin-top: 25px;
+	.cartogram__tooltip__spout {
+		margin-top: -8px;
+		top: 0;
+		&:before { border-bottom-color: #ddd; margin-top: -10px; }
+		&:after { border-bottom-color: rgba(255,255,255,0.9); }
+	}
 }
 
-.cartogram__tooltip--left:before {
-	border-left-color: #ddd;
-	border-right-color: transparent;
-}
 
-.cartogram__tooltip--left:after {
-  	border-left-color: rgba(255,255,255,0.9);
-	border-right-color: transparent;
-}
+// .cartogram__tooltip--left:before {
+// 	border-left-color: #ddd;
+// 	border-right-color: transparent;
+// }
+
+// .cartogram__tooltip--left:after {
+//   	border-left-color: rgba(255,255,255,0.9);
+// 	border-right-color: transparent;
+// }

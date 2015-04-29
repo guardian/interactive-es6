@@ -41,8 +41,7 @@ export class UKCartogram {
         var defaultOpts = {
             mouseBindings: true,
             selectCallback: () => false, // no-op
-            tooltipCallback: () => false, // no-op
-            bigTooltips: false,
+            tooltipCallback: () => false // no-op
         }
 
         this.opts = {}
@@ -107,26 +106,19 @@ export class UKCartogram {
         }
 
         this.tooltip.innerHTML = 
+            '<span class="cartogram__tooltip__spout"></span>' +
             `<h4>${c.name}</h4>${msg}` +
-            '<span class="cartogram__tooltip__tap2expand">Click here for details</span>';
+            '<span class="cartogram__tooltip__tap2expand"></span>';
 
         var rect = this.tooltip.getBoundingClientRect();
         var centroid = this.hexCentroids[constituencyId];
         var coords = this.mapCoordsToScreenCoords(centroid);
         this.tooltip.style.visibility = 'visible';
         
-        if (this.opts.bigTooltips) {
-            var topSide = coords[1] > (this.elDimensions.width / 2);
-            this.tooltip.style.top = (topSide ? coords[1]-rect.height : coords[1]) + 'px';
-            this.tooltip.style.left = (coords[0] - (rect.width / 2)) + 'px';
-            this.tooltip.className = 'cartogram__tooltip' + (topSide ? ' cartogram__tooltip--top' : ' cartogram__tooltip--bottom');
-        } else {
-            var leftHandSide = coords[0] > (this.elDimensions.width / 2);
-            this.tooltip.style.left = (leftHandSide ? coords[0]-rect.width : coords[0]) +'px';
-            this.tooltip.style.top = (coords[1] - (rect.height / 2)) + 'px';
-            this.tooltip.className = 'cartogram__tooltip' + (leftHandSide ? ' cartogram__tooltip--left' : '');
-        }
-        
+        var topSide = coords[1] > (this.elDimensions.height / 2);
+        this.tooltip.style.top = (topSide ? coords[1]-rect.height : coords[1]) + 'px';
+        this.tooltip.style.left = (coords[0] - (rect.width / 2)) + 'px';
+        this.tooltip.className = 'cartogram__tooltip' + (topSide ? ' cartogram__tooltip--above' : ' cartogram__tooltip--below');
     }
 
     hideTooltip() {
@@ -313,6 +305,7 @@ export class UKCartogram {
         this.setTransform([translateX, translateY], [2,2])
         if (this.focusedConstituency) {
             var focused = this.focusedConstituency;
+            this.focusedConstituency = null;
             this.hideTooltip();
             window.setTimeout(() => this.focusConstituency(focused), 500);
         }
