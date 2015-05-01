@@ -32,7 +32,7 @@
     text-align: center;
     line-height: 300px;
     font-family: "Guardian Agate Sans 1 Web","Agate Sans",sans-serif;
-    font-family: "Guardian Egyptian Web",Georgia,serif; 
+    font-family: "Guardian Egyptian Web",Georgia,serif;
     font-size: 24px;
 }
 
@@ -129,8 +129,8 @@
         @include mq(tablet) {
             font-size: 16px;
         }
-    }  
-} 
+    }
+}
 
 #dropdown {
     padding-top: 12px;

@@ -27,30 +27,41 @@
     padding: 0;
     margin: 0;
     list-style-type: none;
-    height: 30px;
-    @include mq(tablet) {
-        height: 50px;
-    }
+    height: 50px;
 
     li {
-      float: left;
-      height: 100%;
-      text-align: center;
-      position: relative;
-      span {
-        position: absolute;
-        top: -20px;
-        left: -50px;
-        right: -50px;
-        font-size: 15px;
-        @include mq(tablet) {
-            font-size: 16px;
-        }
-      }
-    }
+        float: left;
+        height: 100%;
+        text-align: center;
+        position: relative;
+        font-family: "Guardian Egyptian Web",Georgia,serif;
+        font-weight: bold;
+        font-weight: 600;
+        font-size: 14px;
 
-    li[data-partyname='Green'], li[data-partyname='UKIP'] {
-        span { bottom: -20px; top: auto; }
+        span {
+            position: absolute;
+            bottom: 100%;
+            left: -50px;
+            right: -50px;
+        }
+
+
+        &[data-partyname='Lab'],
+        &[data-partyname='Con'] {
+            font-size: 18px;
+            span {
+                width: auto;
+            }
+        }
+        &[data-partyname='Lab'] span {
+            left: 0;
+            right: auto;
+        }
+        &[data-partyname='Con'] span {
+            left: auto;
+            right: 0;
+        }
     }
 
     @include mq(tablet) {
