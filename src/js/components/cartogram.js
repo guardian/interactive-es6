@@ -3,6 +3,7 @@ import regionsTopo from '../data/regions-topo.json!json'
 import topojson from 'mbostock/topojson'
 import d3 from 'd3'
 import textures from 'riccardoscalco/textures'
+import dropdownHTML from './templates/cartogramDropdown.html!text'
 
 d3.selection.prototype.moveToFront = function() {
     return this.each(function(){
@@ -21,6 +22,7 @@ export class UKCartogram {
         this.svg = d3.select(el).append("svg");
         this.map = this.svg.append('g');
         this.selectConstituencyCallback = this.opts.selectCallback;
+        this.metric = 'Winning Party';
 
         this.el.style.height = parseInt(window.innerHeight * 0.9, 10) + 'px';
 
@@ -41,7 +43,16 @@ export class UKCartogram {
         var defaultOpts = {
             mouseBindings: true,
             selectCallback: () => false, // no-op
-            tooltipCallback: () => false // no-op
+            tooltipCallback: () => false, // no-op
+            partyColors: {
+                Con: '#005789',
+                Green: '#33A22B',
+                Lab: '#E31F26',
+                SNP: '#FCDD03',
+                LD: '#FFB900',
+                UKIP: '#7D0069',
+                PC: '#868686'
+            }
         }
 
         this.opts = {}
@@ -138,16 +149,10 @@ export class UKCartogram {
         this.hexGroup = this.map.append('g').attr('class', 'cartogram__hexgroup')
         this.hexPaths = this.hexGroup.selectAll("path")
                                 .data(this.hexFeatures)
-        // window.setTimeout(function() {
-            this.hexPaths
-                .enter().append("path")
-                .attr("d", this.path)
-            if (this.lastRenderedData) this.render(this.lastRenderedData);
-
-        // }.bind(this), 300)
-
-        // this.hexCentroids = {}
-        // this.hexPaths.each(d => this.hexCentroids[d.properties.constituency] = this.path.centroid(d));
+        this.hexPaths
+            .enter().append("path")
+            .attr("d", this.path)
+        if (this.lastRenderedData) this.render(this.lastRenderedData);
     }
 
     renderRegions() {
@@ -212,12 +217,16 @@ export class UKCartogram {
 
     initButtons() {
         var controls = document.createElement('div');
+        controls.className = 'cartogram__controls';
         var resetButton = '<div class="cartogram__reset-zoom"></div>';
-        controls.innerHTML = resetButton;
+        controls.innerHTML = dropdownHTML + resetButton;
         this.el.appendChild(controls)
 
         controls.querySelector('.cartogram__reset-zoom')
             .addEventListener('click', function() { this.resetZoom(); this.selectConstituency(null); }.bind(this) );
+
+        controls.querySelector('.cartogram__dropdown')
+            .addEventListener('change', function(evt) { this.setMetric(evt.target.value); }.bind(this));
     }
 
     initEventHandling() {
@@ -346,12 +355,14 @@ export class UKCartogram {
             .attr('transform', `translate(${translate}) scale(${scale})`);
     }
 
-    render(data) {
-        var self = this;
-        this.lastRenderedData = data;
-        var constituenciesById = this.constituenciesById = {};
-        data.constituencies.forEach(c => constituenciesById[c.ons_id] = c)
+    setMetric(metric) {
+        if (metric !== this.metric) {
+            this.metric = metric;
+            if (this.lastRenderedData) this.render(this.lastRenderedData);
+        }
+    }
 
+    initTextures() {
         if (!this.texture) {
             this.texture = textures.lines()
                 .size(4)
@@ -367,12 +378,27 @@ export class UKCartogram {
             this.svg.call(this.texture);
             this.svg.call(this.texture2);
         }
+    }
+    renderChoropleth(idToValMap, colorRange, defaultFill='#999') {
+        var values = Array.from(idToValMap.values()).filter(k => k !== undefined)
+        var color = d3.scale.linear()
+            .domain([Math.min.apply(null, values), Math.max.apply(null, values)])
+            .range(colorRange);
 
         this.hexPaths
-            .attr('class', function(d) {
-                var constituency = constituenciesById[d.properties.constituency];
-                return 'cartogram__hex cartogram__hex--' + (constituency['2015'].winningParty || 'pending').toLowerCase();
+            .attr('fill', function(d) {
+                var value = idToValMap.get(d.properties.constituency);
+                return value !== undefined ? color(value) : defaultFill;
             });
+    }
+
+    render(data) {
+        var self = this;
+        this.initTextures();
+        this.lastRenderedData = data;
+        var constituenciesById = this.constituenciesById = {};
+        data.constituencies.forEach(c => constituenciesById[c.ons_id] = c)
+
 
         var alternate = 0;
         this.hexPaths
@@ -381,6 +407,46 @@ export class UKCartogram {
                 if (hasResult) d3.select(this).style('fill', '');
                 else d3.select(this).style('fill', () => (alternate++ % 2) ? self.texture.url() : self.texture2.url());
             });
+
+        var choro = ['Turnout %', 'Majority %']
+        var isChoro = (metric) => metric.startsWith('voteshare') || choro.indexOf(metric) !== -1
+
+        if (this.metric === 'Winning Party') {
+            this.hexPaths
+                .attr('class', function(d) {
+                    var constituency = constituenciesById[d.properties.constituency];
+                    return 'cartogram__hex cartogram__hex--' + (constituency['2015'].winningParty || 'pending').toLowerCase();
+                });
+        } else if (isChoro(this.metric)) {
+
+            this.hexPaths.attr('class', function(d) {
+                var constituency = constituenciesById[d.properties.constituency];
+                return 'cartogram__hex' + (!constituency['2015'].winningParty ? ' cartogram__hex--pending' : '');
+            });
+
+            if(this.metric === 'Turnout %') {
+                var pairs = data.constituencies.map(c => [c.ons_id, c['2015'].percentageTurnout])
+                this.renderChoropleth(new Map(pairs), ["white", "black"]);
+            } else if(this.metric === 'Majority %') {
+                var pairs = data.constituencies.map(c => [c.ons_id, c['2015'].percentageMajority])
+                this.renderChoropleth(new Map(pairs), ["white", "black"]);
+            } else if(this.metric === 'Labour %') {
+                var pairs = data.constituencies
+                    .map(c => [c.ons_id, c['2015'].candidates.find(cand => cand.party === 'Lab')] )
+                    .filter(v => v[1] !== undefined)
+                    .map(v => [v[0], v[1].percentage])
+                this.renderChoropleth(new Map(pairs), ["white", "#004974"]);
+            } else if (this.metric.startsWith('voteshare')) {
+                var partyName = this.metric.slice(10);
+                var pairs = data.constituencies
+                    .map(c => [c.ons_id, c['2015'].candidates.find(cand => cand.party === partyName)])
+                    .filter(v => v[1] !== undefined)
+                    .map(v => [v[0], v[1].percentage])
+                this.renderChoropleth(new Map(pairs), ["white", this.opts.partyColors[partyName]]);
+            }
+        } else if (isArrow(this.metric)) {
+
+        }
 
         if (this.selectedLatestIds) this.setLatest(this.selectedLatestIds);
     }

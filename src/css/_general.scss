@@ -75,6 +75,7 @@
 }
 
 @each $party, $color in $partyColors {
+    .veri__party-bg--#{$party},
     .veri__blip--#{$party} {
         background-color: $color;
     }
