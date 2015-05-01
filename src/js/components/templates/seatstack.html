@@ -1,5 +1,10 @@
 <div class="seatstack">
     <div class="seatstack__majority"><strong>326 seats</strong><span> for a majority</span></div>
+    {% if resultCount < 650 %}
+    <div class="seatstack__totals">
+        <strong>{{650 - resultCount}} seats left</strong>, of 650
+    </div>
+    {% endif %}
     <ul class="seatstack__bar">
         {% for party in partyData %}
         {% if party.seats > 0 %}
@@ -9,10 +14,6 @@
         {% endif %}
         {% endfor %}
     </ul>
-    <div class="seatstack__totals">
-    {% if resultCount < 651 %}<strong>{{650 - resultCount}} seats left</strong>, of 650
-    {% else %}{% endif %}
-    </div>
 
     {% for list in [partyListLeft, partyListRight] %}
     <ul class="seatstack-list">
