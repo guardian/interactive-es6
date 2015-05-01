@@ -15,7 +15,11 @@ module.exports = function(grunt) {
             },
             harness: {
                 files: ['harness/**/*'],
-                tasks: ['copy','template']
+                tasks: ['copy:main','template']
+            },
+            html: {
+                files: ['src/html/**/*'],
+                tasks: ['copy:snap']
             }
         },
 
@@ -72,6 +76,10 @@ module.exports = function(grunt) {
             main: {
                 files: [
                     {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html', 'mega.json', 'front.html'], dest: 'build'},
+                ]
+            },
+            snap: {
+                files: [
                     {expand: true, cwd: 'src/html/', src: ['snap.html'], dest: 'build'},
                 ]
             }

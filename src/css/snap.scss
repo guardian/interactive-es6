@@ -2,3 +2,24 @@
 @import 'mq';
 @import 'parties';
 @import 'seatstack';
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #dcdcdc;
+}
+
+.snap {
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.snap__left-pane {
+    float: left;
+    width: 50%;
+}
+
+.snap__right-pane {
+    float: right;
+    width: 50%;
+}
