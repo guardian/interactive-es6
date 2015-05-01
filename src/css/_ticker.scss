@@ -8,8 +8,9 @@
     color: #333;
 
     .veri__relative-date {
+        color: #767676;
         display: inline-block;
-        width: 116px;
+        margin-left: 5px;
     }
 
     @include mq($until: tablet) {
@@ -27,8 +28,7 @@
     border: 1px solid transparent;
     padding-left: 2px;
     &:hover {
-        background-color: #fefefe;
-        border: 1px solid #e7e7e7;
+        background-color: #f1f1f1;
         transition: none;
     }
 }
