@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         watch: {
             js: {
                 files: ['src/js/**/*'],
-                tasks: ['shell:jspmBundleStatic'],
+                tasks: ['shell'],
             },
             css: {
                 files: ['src/css/**/*'],
@@ -29,7 +29,8 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'build/main.css': 'src/css/main.scss'
+                    'build/main.css': 'src/css/main.scss',
+                    'build/snap.css': 'src/css/snap.scss'
                 }
             }
         },
@@ -37,6 +38,14 @@ module.exports = function(grunt) {
         shell: {
             jspmBundleStatic: {
                 command: './node_modules/.bin/jspm bundle-sfx src/js/main build/main.js',
+                options: {
+                    execOptions: {
+                        cwd: '.'
+                    }
+                }
+            },
+            jspmBundleSnap: {
+                command: './node_modules/.bin/jspm bundle-sfx src/js/snap build/snap.js',
                 options: {
                     execOptions: {
                         cwd: '.'
@@ -62,7 +71,8 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html', 'mega.json'], dest: 'build'}
+                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html', 'mega.json', 'front.html'], dest: 'build'},
+                    {expand: true, cwd: 'src/html/', src: ['snap.html'], dest: 'build'},
                 ]
             }
         },
