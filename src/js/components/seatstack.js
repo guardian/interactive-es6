@@ -21,7 +21,6 @@ function data2context(data) {
 		gains: otherParties.map(p => p.gains).reduce((a,b) => a + b),
 		losses: otherParties.map(p => p.losses).reduce((a,b) => a + b)
 	}
-	console.log(partiesByName.Others);
 	partiesByName.Pending = { seats: 650 - totalSeatsWon }
 
 	var partyData = parties
@@ -57,5 +56,9 @@ export class Seatstack {
 	}
 	render(data) {
 		this.el.innerHTML = templateFn(data2context(data));
+
+		if (data.overview.results > 500) {
+			this.el.className = 'seatstack seatstack--majority-below';
+		}
 	}
 }
