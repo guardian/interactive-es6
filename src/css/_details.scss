@@ -68,3 +68,29 @@
 	}
 
 }
+
+.veri__details-vote-perc {
+	display: inline-block;
+	width: 36px;
+	font-size: 12px;
+	vertical-align: top;
+}
+
+.veri__details-bar-container,
+.veri__details-bar {
+	display: inline-block;
+	height: 14px;
+	vertical-align: middle;
+	margin-top: -3px;
+}
+
+.veri__details-bar-container {
+	margin-right: 10px;
+}
+
+.veri__details-stats {
+	li strong {
+		display: inline-block;
+		width: 100px;
+	}
+}

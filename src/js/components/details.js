@@ -37,8 +37,41 @@ export class Details {
 
 	selectConstituency(constituencyId) {
 		this.selectedConstituency = constituencyId;
-		if (constituencyId) this.el.innerHTML = templateFn({constituency: this.constituenciesById[constituencyId]});
+		if (constituencyId) {
+			this.el.innerHTML = templateFn({
+				msgFn: this.generateResultHTML,
+				constituency: this.constituenciesById[constituencyId],
+				stats: this.generateStats(this.constituenciesById[constituencyId])
+			});
+		}
 		this.el.className = 'veri__details' + (constituencyId ? ' veri__details--show' : '');
+	}
+
+	generateResultHTML(constituency) {
+		var c = constituency;
+        if (c['2015'].winningParty) {
+            var partyName = (party) =>
+                `<span class="veri__blip veri__blip--${party.toLowerCase()}"></span>` +
+                `<strong>${party}</strong>`
+
+            var e = c['2015']
+
+            var verb = e.winningParty === e.sittingParty ? 'holds' : 'gains';
+            var fromParty = verb === 'gains' ? ` from ${partyName(e.sittingParty)}` : '';
+            var how = e.percentageMajority ? `with a ${e.percentageMajority}% majority` : '';
+
+            return `<p>${partyName(e.winningParty)} ${verb}${fromParty} ${how}</p>`
+        } else {
+            return '<p>Result pending</p>'
+        }
+	}
+
+	generateStats(constituency) {
+		return {
+			Electorate: constituency['2015'].electorate,
+			"Turnout (%)": constituency['2015'].percentageTurnout.toFixed(1) + "%",
+			"Announced": constituency['2015'].updated
+		}
 	}
 
 	hide() {

@@ -11,19 +11,29 @@
 
 <h3>Result</h3>
 {% if constituency['2015'].winningParty %}
-	<span class="veri__blip veri__blip--{{ constituency['2015'].winningParty | lower }}"></span>
-	{{ constituency['2015'].winningParty }} wins
+	{{ msgFn(constituency) }}
 {% else %}
 Result pending
 {% endif %}
 <h3>Candidates</h3>
 <ul>
-{% for cand in constituency['2015'].candidates %}
-<li>
-	<span class="veri__blip veri__blip--{{cand.party.toLowerCase()}}"></span>
-	{% if cand.url %}<a href="{{cand.url}}" target="_blank">{% endif %}
-		{{cand.name}}, {{cand.party}} {% if cand.prevSitting %}(current){% endif %}
-	{% if cand.url %}</a>{% endif %}
-</li>
-{% endfor %}
+	{% for cand in constituency['2015'].candidates %}
+	<li>
+		{% if constituency['2015'].status === 'result' %}
+			<span class="veri__details-vote-perc">{{cand.percentage.toFixed(1)}}%</span>
+			<div class="veri__details-bar-container" style="width: {{constituency['2015'].candidates[0].percentage}}px;">
+				<span class="veri__details-bar veri__party-bg--{{cand.party.toLowerCase()}}" style="width: {{cand.percentage}}px;"></span>
+			</div>
+		{% endif %}
+		{% if cand.url %}<a href="{{cand.url}}" target="_blank">{% endif %}
+			{{cand.name}}, {{cand.party}} {% if cand.prevSitting %}(current){% endif %}
+		{% if cand.url %}</a>{% endif %}
+	</li>
+	{% endfor %}
+</ul>
+<h3>Stats (??)</h3>
+<ul class="veri__details-stats">
+	{% for stat in Object.keys(stats) %}
+	<li><strong>{{stat}}</strong>{{stats[stat]}}</li>
+	{% endfor %}
 </ul>
