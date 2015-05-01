@@ -10,7 +10,7 @@
 }
 
 .seatstack__majority {
-    height: 40px;
+    height: 50px;
     text-align: center;
     width: 100%;
     position: relative;
@@ -23,7 +23,7 @@
         bottom: 0;
     }
 }
-.seatstack ul {
+.seatstack__bar {
     padding: 0;
     margin: 0;
     list-style-type: none;
@@ -57,6 +57,74 @@
         li:hover {
             -webkit-filter: brightness(90%);
             filter: brightness(0.9);
-        }        
+        }
     }
+}
+
+.seatstack__totals {
+    font-size: 12px;
+    line-height: 24px;
+}
+
+
+$seatstack-list-lineheight: 24px;
+
+.seatstack-list {
+    width: calc(50% - 5px);
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 36px;
+    float: left;
+    span {
+        display: inline-block;
+    }
+
+    & + & {
+        float: right;
+    }
+    @include mq(tablet) {
+        width: calc(50% - 10px);
+    }
+    @include mq(desktop) {
+        width: calc(50% - 20px);
+    }
+}
+.seatstack-list__item {
+    vertical-align: middle;
+    height: 36px;
+    overflow: hidden;
+    & + & {
+        border-top: 1px solid #f1f1f1;
+    }
+}
+
+.seatstack-list__partybox {
+  width: 10px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.seatstack-list__party-name {
+    margin-left: 12px;
+}
+
+.seatstack-list__net,
+.seatstack-list__seats {
+    float: right;
+}
+
+.seatstack-list__net {
+    color: #aaa;
+    width: 25px;
+    border-left: 1px dotted #f1f1f1;
+    text-align: right;
+}
+
+.seatstack-list__seats {
+    color: #333;
+    font-weight: bold;
+    padding-right: 10px;
 }

@@ -1,12 +1,30 @@
 <div class="seatstack">
     <div class="seatstack__majority"><strong>326 seats</strong> for a majority</div>
-    <ul>
-        {% for data in seatstack %}
-        {% if data.seats > 0 %}
-        <li data-partyname="{{data.name}}" style="width: {{(data.seats/650)*100}}%">
-            <span>{{data.seats}}</span>
+    <ul class="seatstack__bar">
+        {% for party in partyData %}
+        {% if party.seats > 0 %}
+        <li data-partyname="{{party.name}}" style="width: {{(party.seats/650)*100}}%">
+            <span>{{party.seats}}</span>
         </li>
         {% endif %}
         {% endfor %}
     </ul>
+    <div class="seatstack__totals">
+    {% if resultCount < 651 %}<strong>{{650 - resultCount}} seats left</strong>, of 650
+    {% else %}{% endif %}
+    </div>
+
+    {% for list in [partyListLeft, partyListRight] %}
+    <ul class="seatstack-list">
+        {% for party in list %}
+        <li class="seatstack-list__item">
+            <span class="seatstack-list__partybox" data-partyname="{{party.name}}"></span>
+            <span class="seatstack-list__party-name">{{party.name}}</span>
+            <span class="seatstack-list__net">{% if party.net > 0 %}+{%endif%}{{party.net}}</span>
+            <span class="seatstack-list__seats">{{party.seats}}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+
 </div>
