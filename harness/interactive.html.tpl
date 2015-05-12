@@ -688,7 +688,7 @@ Last modified on Wednesday 15 April 2015 <span class="content__dateline-time">02
 </div>
 <div class="gs-container" data-test-id="interactive-content-body">
 <div class="content__main-column content__main-column--interactive">
-<figure class="element element-interactive interactive" data-interactive="<%= assetPath %>/boot.js" data-alt="metadata"> LOADING... </figure>
+<figure class="element element-interactive interactive" data-interactive="<%= assetPath %>/boot.js" data-alt="metadata"></figure>
 </div>
 </div>
 <div class="gs-container u-cf">

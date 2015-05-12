@@ -1,0 +1,23 @@
+.interactive-es6-headline {
+	@include fs-headline(5);
+}
+
+.ipaddress {
+	color: #005689;
+	@include fs-textSans(3);
+}
+
+.fonts {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	margin-top: 24px;
+	li {
+		margin-bottom: 6px;
+	}
+}
+
+.fonts__egyptian { @include fs-headline(3); }
+.fonts__text-egyptian { @include fs-bodyCopy(2); }
+.fonts__sans { @include f-headlineSans; }
+.fonts__text-sans { @include fs-textSans(4); }

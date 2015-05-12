@@ -1,0 +1,30 @@
+$guss-webfonts-base-url: '/fonts/';
+$guss-webfonts-charset: 'original';
+$guss-webfonts-hinting: 'auto';
+$guss-webfonts-kerning: 'on';
+$guss-webfonts-version: '0.1.0';
+
+$frontend-webfonts: ( // this should replicate frontend's font config
+    'Guardian Egyptian Web': (
+        (weight: 'light', style: 'normal'),
+        (weight: 'regular', style: 'normal'),
+        (weight: 'medium', style: 'normal'),
+        (weight: 'semibold', style: 'normal'),
+    ),
+    'Guardian Sans Web': (
+        (weight: 'regular', style: 'normal'),
+    ),
+    'Guardian Text Egyptian Web': (
+        (weight: 'regular', style: 'normal'),
+        (weight: 'regular', style: 'italic'),
+        (weight: 'medium', style: 'normal'),
+    ),
+    'Guardian Text Sans Web': (
+        (weight: 'regular', style: 'normal'),
+        (weight: 'regular', style: 'italic'),
+        (weight: 'medium', style: 'normal'),
+    ),
+) !default;
+
+@import '../bower_components/guss-webfonts/src/_webfonts.scss';
+@include guss-webfonts($frontend-webfonts);
