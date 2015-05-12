@@ -58,6 +58,14 @@ module.exports = function(grunt) {
         },
 
         shell: {
+            setup: {
+                command: 'npm install && bower install && ./node_modules/.bin/jspm install',
+                options: {
+                    execOptions: {
+                        cwd: '.'
+                    }
+                }
+            },
             interactive: {
                 command: './node_modules/.bin/jspm bundle-sfx ' + (s3 ? '-m ' : '') + 'src/js/main build/main.js',
                 options: {
@@ -126,10 +134,9 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask('setup', ['shell:setup'])
     grunt.registerTask('harness', ['copy:harness', 'template:harness', 'sass:harness', 'symlink:fonts'])
     grunt.registerTask('interactive', ['shell:interactive', 'sass:interactive'])
-
     grunt.registerTask('default', ['clean', 'harness', 'interactive', 'connect', 'watch']);
-
-    grunt.registerTask('build', ['clean','interactive', 'copy:deploy']);
+    grunt.registerTask('build', ['clean', 'interactive', 'copy:deploy']);
 }
