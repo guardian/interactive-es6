@@ -40,8 +40,8 @@ import someHTML from './text/template.html!text'
 import someJSON from './data/data.json!json'
 ```
 
-Harness
-=======
+Test Harness
+============
 
 `index.html` - Stripped down test harness. Includes frontend fonts and curl for loading boot.js.
 `lite.html` - Immersive-style interactive page pulled form
