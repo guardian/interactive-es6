@@ -37,7 +37,6 @@ Text/JSON in javascript
 -----------------------
 ```
 import someHTML from './text/template.html!text'
-
 import someJSON from './data/data.json!json'
 ```
 
