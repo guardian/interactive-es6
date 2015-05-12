@@ -35,9 +35,11 @@ Installing a js package
 
 Text/JSON in javascript
 -----------------------
-```import someHTML from './text/template.html!text'
+```
+import someHTML from './text/template.html!text'
 
-import someJSON from './data/data.json!json'```
+import someJSON from './data/data.json!json'
+```
 
 Harness
 =======
