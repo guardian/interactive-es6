@@ -8,22 +8,18 @@ Usage
 
 Setup
 -----
-`grunt setup`
+`npm install`
 
 Development
 -----------
 `grunt`
 
-Production
-----------
-`grunt build`
-
-Deployment
-----------
+Production / deployment
+-----------------------
 `TODO`
 
-Installing a js package
------------------------
+Using third party js
+--------------------
 1. Install package using JSPM e.g.
 
 	`jspm install reqwest` or
@@ -36,7 +32,6 @@ Installing a js package
 
 	`import reqwest from 'guardian/iframe-messenger'`
 
-
 Text/JSON in javascript
 -----------------------
 ```
@@ -48,4 +43,4 @@ Test Harness
 ============
 
 `index.html` - Stripped down test harness. Includes frontend fonts and curl for loading boot.js.
-`lite.html` - Immersive-style interactive page pulled from theguardian.com
+`immersive.html` - Immersive-style interactive page pulled from theguardian.com

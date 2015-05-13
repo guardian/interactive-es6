@@ -58,14 +58,6 @@ module.exports = function(grunt) {
         },
 
         shell: {
-            setup: {
-                command: 'npm install && bower install && ./node_modules/.bin/jspm install',
-                options: {
-                    execOptions: {
-                        cwd: '.'
-                    }
-                }
-            },
             interactive: {
                 command: './node_modules/.bin/jspm bundle-sfx ' + (s3 ? '-m ' : '') + 'src/js/main build/main.js',
                 options: {
@@ -86,7 +78,7 @@ module.exports = function(grunt) {
                 'files': {
                     'build/boot.js': ['harness/boot.js.tpl'],
                     'build/interactive.html': ['harness/interactive.html.tpl'],
-                    'build/lite.html': ['harness/lite.html.tpl']
+                    'build/immersive.html': ['harness/immersive.html.tpl']
                 }
             }
         },
@@ -134,7 +126,6 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('setup', ['shell:setup'])
     grunt.registerTask('harness', ['copy:harness', 'template:harness', 'sass:harness', 'symlink:fonts'])
     grunt.registerTask('interactive', ['shell:interactive', 'sass:interactive'])
     grunt.registerTask('default', ['clean', 'harness', 'interactive', 'connect', 'watch']);
