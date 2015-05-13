@@ -2,7 +2,8 @@ System.config({
   "baseURL": "/",
   "paths": {
     "*": "*.js",
-    "github:*": "src/js/jspm_packages/github/*.js"
+    "github:*": "src/js/jspm_packages/github/*.js",
+    "npm:*": "src/js/jspm_packages/npm/*.js"
   },
   "bundles": {
     "build/main": [

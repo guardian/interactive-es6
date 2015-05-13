@@ -1,16 +1,17 @@
 import iframeMessenger from 'guardian/iframe-messenger'
 import reqwest from 'reqwest'
-import head from './text/head.html!text'
-import fontTest from './text/fonts.html!text'
+import mainHTML from './text/main.html!text'
 
 function init(el, context, config, mediator) {
     iframeMessenger.enableAutoResize();
+
+    el.innerHTML = mainHTML
 
 	reqwest({
 	    url: 'http://ip.jsontest.com/',
 	    type: 'json',
 	    crossOrigin: true,
-	    success: (resp) => el.innerHTML = head + `<div class="ipaddress">Your IP address is: ${resp.ip}</div>` + fontTest
+	    success: (resp) => el.querySelector('.test-msg').innerHTML = `Your IP address is ${resp.ip}`
 	});
 }
 
