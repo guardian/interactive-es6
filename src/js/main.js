@@ -15,4 +15,4 @@ function init(el, context, config, mediator) {
 	});
 }
 
-define(function() { return {init: init}; });
+(window.define || System.amdDefine)(function() { return {init: init}; });
