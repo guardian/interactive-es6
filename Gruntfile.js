@@ -33,8 +33,7 @@ module.exports = function(grunt) {
             },
             interactive: {
                 files: {
-                    'build/main.css': 'src/css/main.scss',
-                    'build/snap.css': 'src/css/snap.scss'
+                    'build/main.css': 'src/css/main.scss'
                 }
             },
             harness: {
@@ -46,7 +45,7 @@ module.exports = function(grunt) {
 
         shell: {
             interactive: {
-                command: './node_modules/.bin/jspm bundle-sfx <%= visuals.jspmFlags %> src/js/main build/main.js',
+                command: './node_modules/.bin/jspm bundle-sfx <%= visuals.jspmFlags %> --amd src/js/main build/main.js',
                 options: {
                     execOptions: {
                         cwd: '.'
@@ -77,7 +76,7 @@ module.exports = function(grunt) {
         copy: {
             harness: {
                 files: [
-                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html', 'mega.json', 'front.html'], dest: 'build'},
+                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html'], dest: 'build'},
                 ]
             },
             deploy: {

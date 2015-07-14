@@ -17,14 +17,12 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "bower install && ./node_modules/.bin/jspm install"
+    "postinstall": "./node_modules/.bin/bower install && ./node_modules/.bin/jspm install"
   },
   "author": "",
   "license": "ISC",
   "jspm": {
-    "directories": {
-      "packages": "src/js/jspm_packages"
-    },
+    "directories": {},
     "configFile": "src/js/config.js",
     "dependencies": {
       "guardian/iframe-messenger": "github:guardian/iframe-messenger@master",
@@ -39,6 +37,6 @@
   },
   "dependencies": {
     "grunt-template": "^0.2.3",
-    "jspm": "^0.15.3"
+    "jspm": "^0.16.0-beta.3"
   }
 }
