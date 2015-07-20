@@ -16,7 +16,8 @@ Development
 
 Production / deployment
 -----------------------
-`TODO`
+1. Update `cfg/s3.json` and create `aws-keys.json` (copy from `aws-keys.example.json`)
+1. `grunt deploy`
 
 Using third party js
 --------------------
