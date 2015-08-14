@@ -5,6 +5,20 @@ figure.interactive {
     background-color: #dcdcdc;
 }
 
+// Link styles don't exist on the app
+a {
+    &,
+    &:hover,
+    &:active {
+        color: #005689;
+    }
+
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 .interactive-container {
     margin: 0 auto;
     box-sizing: border-box;
