@@ -15,6 +15,10 @@ define([], function() {
             // Loading message while we fetch JS / CSS
             el.innerHTML = '<div style="font-size: 24px; text-align: center; padding: 72px 0; font-family: \'Guardian Egyptian Web\',Georgia,serif;">Loading…</div>';
 
+            config = {
+                'assetPath': '<%= assetPath %>'
+            };
+
             // Load CSS asynchronously
             window.setTimeout(function() {
                 addCSS('<%= assetPath %>/main.css');
