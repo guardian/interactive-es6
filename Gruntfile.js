@@ -64,12 +64,6 @@ module.exports = function(grunt) {
                     'assetPath': '<%= visuals.assetPath %>',
                 }
             },
-            'harness': {
-                'files': {
-                    'build/interactive.html': ['harness/interactive.html.tpl'],
-                    'build/immersive.html': ['harness/immersive.html.tpl']
-                }
-            },
             'bootjs': {
                 'files': {
                     'build/boot.js': ['src/js/boot.js.tpl'],
@@ -80,7 +74,7 @@ module.exports = function(grunt) {
         copy: {
             harness: {
                 files: [
-                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html'], dest: 'build'},
+                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html', 'immersive.html', 'interactive.html'], dest: 'build'},
                 ]
             },
             assets: {
@@ -218,7 +212,7 @@ module.exports = function(grunt) {
         grunt.log.writeln(grunt.template.process('<%= visuals.s3.domain %><%= visuals.s3.path %>/boot.js'))
     })
 
-    grunt.registerTask('harness', ['copy:harness', 'template:harness', 'sass:harness', 'symlink:fonts'])
+    grunt.registerTask('harness', ['copy:harness', 'sass:harness', 'symlink:fonts'])
     grunt.registerTask('interactive', ['shell:interactive', 'template:bootjs', 'sass:interactive', 'copy:assets'])
     grunt.registerTask('default', ['clean', 'harness', 'interactive', 'connect', 'watch']);
     grunt.registerTask('build', ['clean', 'interactive']);
