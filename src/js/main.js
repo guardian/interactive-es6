@@ -1,9 +1,9 @@
 import iframeMessenger from 'guardian/iframe-messenger'
 import reqwest from 'reqwest'
-import mainHTML from './text/main.html!text'
+import mainHTML from '../templates/main.html!text'
 import share from './lib/share'
 
-var shareFn = share('Interactive title', 'http://gu.com/p/URL', '#Interactive');
+var shareFn = share('Interactive title', 'http://gu.com/p/URL', null, null, '#Interactive');
 
 export function init(el, context, config, mediator) {
     iframeMessenger.enableAutoResize();
