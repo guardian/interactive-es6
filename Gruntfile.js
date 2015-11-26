@@ -66,7 +66,7 @@ module.exports = function(grunt) {
             },
             'bootjs': {
                 'files': {
-                    'build/boot.js': ['src/js/boot.js.tpl'],
+                    'build/boot.js': ['src/js/boot.js'],
                 }
             }
         },
