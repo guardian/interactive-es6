@@ -1,30 +1,48 @@
 var fs = require('fs');
+var ini = require('ini')
+var path = require('path')
+
+function getAWSCredentials(grunt, cfg) {
+    var awsCredentialsFilePath = cfg.credentialsFile.replace('$HOME', process.env['HOME']);
+    if (!fs.existsSync(awsCredentialsFilePath)) {
+        grunt.log.warn('Credentials file missing: ' + awsCredentialsFilePath);
+        return
+    }
+    var iniFile = ini.parse(fs.readFileSync(awsCredentialsFilePath, 'utf-8'));
+    if (iniFile[cfg.profile]) {
+        grunt.log.ok('Using AWS credentials ' + cfg.profile + ' profile');
+        return iniFile[cfg.profile];
+    }
+
+    grunt.log.warn('AWS Credentials profile ' + cfg.profile + ' does not exist. Using default credentials.')
+    return iniFile.default;
+}
 
 module.exports = function(grunt) {
 
     require('jit-grunt')(grunt);
+
+    var deploy = require('./deploy.json');
+    deploy.versionedPath = path.join(deploy.path, Date.now().toString());
+    var awsCredentials = getAWSCredentials(grunt, deploy);
 
     grunt.initConfig({
 
         visuals: { },
 
         watch: {
-            js: {
-                files: ['src/js/**/*'],
-                tasks: ['shell:interactive'],
-            },
             css: {
                 files: ['src/css/**/*'],
-                tasks: ['sass:interactive'],
+                tasks: ['sass'],
             },
-            assets: {
-                files: ['src/assets/**/*'],
-                tasks: ['copy:assets']
+            inlinejs: {
+                files: ['src/js/**/*', 'src/templates/**/*', '!src/js/boot.js'],
+                tasks: ['shell:inlinedev'],
             },
-            harness: {
-                files: ['harness/**/*'],
-                tasks: ['harness']
-            }
+            bootjs: {
+                files: ['src/js/boot.js'],
+                tasks: ['template:bootjsdev'],
+            },
         },
 
         clean: {
@@ -35,144 +53,66 @@ module.exports = function(grunt) {
             options: {
                 sourceMap: true
             },
-            interactive: {
+            main: {
                 files: {
                     'build/main.css': 'src/css/main.scss'
-                }
-            },
-            harness: {
-                files: {
-                    'build/fonts.css': 'harness/fonts.scss'
                 }
             }
         },
 
         shell: {
-            interactive: {
-                command: './node_modules/.bin/jspm bundle-sfx <%= visuals.jspmFlags %> src/js/main build/main.js --format amd',
-                options: {
-                    execOptions: {
-                        cwd: '.'
-                    }
-                }
+            options: {
+                execOptions: { cwd: '.' }
+            },
+            inlinedev: {
+                command: './node_modules/.bin/jspm bundle-sfx src/js/main build/main.js --format amd'
+            },
+            inlineprod: {
+                command: './node_modules/.bin/jspm bundle-sfx -m src/js/main build/main.js --format amd'
             }
         },
 
         'template': {
-            'options': {
-                'data': {
-                    'assetPath': '<%= visuals.assetPath %>',
-                }
+            'bootjsdev': {
+                'options': { 'data': { 'assetPath': '' } },
+                'files': { 'build/boot.js': ['src/js/boot.js'] }
             },
-            'bootjs': {
-                'files': {
-                    'build/boot.js': ['src/js/boot.js.tpl'],
-                }
+            'bootjsprod': {
+                'options': { 'data': { 'assetPath': deploy.domain + deploy.versionedPath } },
+                'files': { 'build/boot.js': ['src/js/boot.js'] }
             }
-        },
-
-        copy: {
-            harness: {
-                files: [
-                    {expand: true, cwd: 'harness/', src: ['curl.js', 'index.html', 'immersive.html', 'interactive.html'], dest: 'build'},
-                ]
-            },
-            assets: {
-                files: [
-                    {expand: true, cwd: 'src/', src: ['assets/**/*'], dest: 'build'},
-                ]
-            },
-            deploy: {
-                files: [
-                    { // BOOT
-                        expand: true, cwd: 'build/',
-                        src: ['boot.js'],
-                        dest: 'deploy/<%= visuals.timestamp %>'
-                    },
-                    { // ASSETS
-                        expand: true, cwd: 'build/',
-                        src: ['main.js', 'main.css', 'main.js.map', 'main.css.map', 'assets/**/*'],
-                        dest: 'deploy/<%= visuals.timestamp %>/<%= visuals.timestamp %>'
-                    }
-                ]
-            }
-        },
-
-        symlink: {
-            options: {
-                overwrite: false
-            },
-            fonts: {
-                src: 'bower_components/guss-webfonts/webfonts',
-                dest: 'build/fonts/0.1.0'
-            },
-        },
-
-        prompt: {
-            visuals: {
-                options: {
-                    questions: [
-                        {
-                            config: 'visuals.s3.stage',
-                            type: 'list',
-                            message: 'Deploy to TEST or PRODUCTION URL?',
-                            choices: [{
-                                name: 'TEST: <%= visuals.s3.domain %>testing/<%= visuals.s3.path %>',
-                                value: 'TEST'
-                            },{
-                                name: 'PROD: <%= visuals.s3.domain %><%= visuals.s3.path %>',
-                                value: 'PROD'
-                            }]
-                        },
-                        {
-                            config: 'visuals.confirmDeploy',
-                            type: 'confirm',
-                            message: 'Deploying to PRODUCTION. Are you sure?',
-                            default: false,
-                            when: function(answers) {
-                                return answers['visuals.s3.stage'] === 'PROD';
-                            }
-                        }
-                    ],
-                    then: function(answers) {
-                        if (grunt.config('visuals.s3.stage') !== 'PROD') { // first Q
-                            var prodPath = grunt.config('visuals.s3.path');
-                            var testPath = 'testing/' + prodPath;
-                            grunt.config('visuals.s3.path', testPath);
-                        } else if (answers['visuals.confirmDeploy'] !== true) { // second Q
-                            grunt.fail.warn('Please confirm to deploy to production.');
-                        }
-                    }
-                }
-            },
         },
 
         aws_s3: {
             options: {
-                accessKeyId: '<%= visuals.aws.AWSAccessKeyID %>',
-                secretAccessKey: '<%= visuals.aws.AWSSecretKey %>',
+                accessKeyId: awsCredentials.aws_access_key_id,
+                secretAccessKey: awsCredentials.aws_secret_access_key,
                 region: 'us-east-1',
+                uploadConcurrency: 10, // 5 simultaneous uploads
+                downloadConcurrency: 10, // 5 simultaneous downloads
                 debug: grunt.option('dry'),
-                bucket: '<%= visuals.s3.bucket %>'
+                bucket: deploy.bucket,
+                differential: true
             },
-            production: {
-                options: {
-                },
+            inline: {
                 files: [
-                    { // ASSETS
+                    {
                         expand: true,
-                        cwd: 'deploy/<%= visuals.timestamp %>',
-                        src: ['<%= visuals.timestamp %>/**/*'],
-                        dest: '<%= visuals.s3.path %>',
-                        params: { CacheControl: 'max-age=2678400' }
+                        cwd: 'build',
+                        src: [ 'boot.js' ],
+                        dest: deploy.path,
+                        params: { CacheControl: 'max-age=5' }
                     },
-                    { // BOOT
+                    {
                         expand: true,
-                        cwd: 'deploy/<%= visuals.timestamp %>',
-                        src: ['boot.js'],
-                        dest: '<%= visuals.s3.path %>',
+                        cwd: '.',
+                        src: [
+                            'build/main.js', 'build/main.js.map', 'build/main.css', 'build/main.css.map'
+                        ],
+                        dest: deploy.versionedPath,
                         params: { CacheControl: 'max-age=60' }
-                    }]
+                    }
+                ]
             }
         },
 
@@ -181,12 +121,17 @@ module.exports = function(grunt) {
                 options: {
                     hostname: '0.0.0.0',
                     port: 8000,
-                    base: 'build',
+                    base: '.',
                     middleware: function (connect, options, middlewares) {
                         // inject a custom middleware http://stackoverflow.com/a/24508523
                         middlewares.unshift(function (req, res, next) {
+                            if (req.url === '/') req.url = '/test-inline.html';
                             res.setHeader('Access-Control-Allow-Origin', '*');
                             res.setHeader('Access-Control-Allow-Methods', '*');
+                            if (req.originalUrl.indexOf('/jspm_packages/') === 0 ||
+                                req.originalUrl.indexOf('/bower_components/') === 0) {
+                                res.setHeader('Cache-Control', 'public, max-age=315360000');
+                            }
                             return next();
                         });
                         return middlewares;
@@ -196,27 +141,16 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('loadDeployConfig', function() {
-        if (!grunt.file.exists('cfg/aws-keys.json')) grunt.fail.fatal('./cfg/aws-keys.json missing');
-        grunt.config('visuals', {
-            s3: grunt.file.readJSON('./cfg/s3.json'),
-            aws: grunt.file.readJSON('./cfg/aws-keys.json'),
-            timestamp: Date.now(),
-            jspmFlags: '-m',
-            assetPath: '<%= visuals.s3.domain %><%= visuals.s3.path %>/<%= visuals.timestamp %>'
-        });
-    })
-
     grunt.registerTask('boot_url', function() {
         grunt.log.write('\nBOOT URL: '['green'].bold)
-        grunt.log.writeln(grunt.template.process('<%= visuals.s3.domain %><%= visuals.s3.path %>/boot.js'))
+        grunt.log.writeln(deploy.domain + deploy.path + '/boot.js');
     })
 
-    grunt.registerTask('harness', ['copy:harness', 'sass:harness', 'symlink:fonts'])
-    grunt.registerTask('interactive', ['shell:interactive', 'template:bootjs', 'sass:interactive', 'copy:assets'])
-    grunt.registerTask('default', ['clean', 'harness', 'interactive', 'connect', 'watch']);
-    grunt.registerTask('build', ['clean', 'interactive']);
-    grunt.registerTask('deploy', ['loadDeployConfig', 'prompt:visuals', 'build', 'copy:deploy', 'aws_s3', 'boot_url']);
+    grunt.registerTask('deploy', ['clean', 'sass', 'shell:inlineprod', 'template:bootjsprod', 'aws_s3:inline', 'boot_url']);
+    grunt.registerTask('dev', ['clean', 'sass', 'shell:inlinedev', 'template:bootjsdev', 'connect', 'watch']);
+    grunt.registerTask('devfast', ['clean', 'sass', 'template:bootjsdev', 'connect', 'watch:css', 'watch:bootjs']);
+
+    grunt.registerTask('default', ['dev']);
 
     grunt.loadNpmTasks('grunt-aws');
 

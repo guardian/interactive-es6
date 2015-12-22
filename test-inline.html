@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="build/main.css">
+        <script src="harness/curl.js"></script>
+        <style>
+          html, body {
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+          }
+          p {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+          }
+          figure {
+            margin: 0;
+          }
+          figure img {
+            display: block;
+          }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <figure class="interactive"><a href="index.html">interactive-template</a></figure>
+        <script type="text/javascript">
+          var el = document.querySelector('.interactive');
+          console.log(el);
+          window.require = curl;
+          require(['build/boot.js'], function(app) {
+                app.boot(el);
+          });
+        </script>
+    </body>
+</html>
