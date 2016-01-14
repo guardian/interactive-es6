@@ -1,4 +1,3 @@
-import iframeMessenger from 'guardian/iframe-messenger'
 import reqwest from 'reqwest'
 import mainHTML from './text/main.html!text'
 import share from './lib/share'
@@ -6,8 +5,6 @@ import share from './lib/share'
 var shareFn = share('Interactive title', 'http://gu.com/p/URL', '#Interactive');
 
 export function init(el, context, config, mediator) {
-    iframeMessenger.enableAutoResize();
-
     el.innerHTML = mainHTML.replace(/%assetPath%/g, config.assetPath);
 
     reqwest({
