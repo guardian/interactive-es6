@@ -153,7 +153,9 @@ module.exports = function(grunt) {
             options: {
                 region: 'us-east-1',
                 debug: grunt.option('dry'),
-                bucket: '<%= visuals.s3.bucket %>'
+                bucket: '<%= visuals.s3.bucket %>',
+                uploadConcurrency: 10, // 5 simultaneous uploads
+                downloadConcurrency: 10 // 5 simultaneous downloads
             },
             production: {
                 options: {
