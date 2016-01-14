@@ -133,8 +133,6 @@ module.exports = function(grunt) {
 
         aws_s3: {
             options: {
-                accessKeyId: '<%= visuals.aws.AWSAccessKeyID %>',
-                secretAccessKey: '<%= visuals.aws.AWSSecretKey %>',
                 region: 'us-east-1',
                 debug: grunt.option('dry'),
                 bucket: '<%= visuals.s3.bucket %>'
@@ -181,10 +179,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('loadDeployConfig', function() {
-        if (!grunt.file.exists('cfg/aws-keys.json')) grunt.fail.fatal('./cfg/aws-keys.json missing');
         grunt.config('visuals', {
             s3: grunt.file.readJSON('./cfg/s3.json'),
-            aws: grunt.file.readJSON('./cfg/aws-keys.json'),
             timestamp: Date.now(),
             jspmFlags: '-m',
             assetPath: '<%= visuals.s3.domain %><%= visuals.s3.path %>/<%= visuals.timestamp %>'
