@@ -11,11 +11,11 @@ module.exports = function(grunt) {
         watch: {
             js: {
                 files: ['src/js/**/*'],
-                tasks: ['shell:interactive'],
+                tasks: ['shell:interactive', 'shell:embed'],
             },
             css: {
                 files: ['src/css/**/*'],
-                tasks: ['sass:interactive'],
+                tasks: ['sass'],
             },
             assets: {
                 files: ['src/assets/**/*'],
@@ -39,12 +39,25 @@ module.exports = function(grunt) {
                 files: {
                     'build/main.css': 'src/css/main.scss'
                 }
+            },
+            embed: {
+                files: {
+                    'build/embed.css': 'src/css/embed.scss'
+                }
             }
         },
 
         shell: {
             interactive: {
                 command: './node_modules/.bin/jspm bundle-sfx <%= visuals.jspmFlags %> src/js/main build/main.js --format amd',
+                options: {
+                    execOptions: {
+                        cwd: '.'
+                    }
+                }
+            },
+            embed: {
+                command: './node_modules/.bin/jspm bundle-sfx <%= visuals.jspmFlags %> src/js/embed build/embed.js',
                 options: {
                     execOptions: {
                         cwd: '.'
@@ -63,6 +76,11 @@ module.exports = function(grunt) {
                 'files': {
                     'build/boot.js': ['src/js/boot.js.tpl'],
                 }
+            },
+            'embed': {
+                'files': {
+                    'build/embed.html': ['src/embed.html']
+                }
             }
         },
 
@@ -79,9 +97,9 @@ module.exports = function(grunt) {
             },
             deploy: {
                 files: [
-                    { // BOOT
+                    { // BOOT and EMBED
                         expand: true, cwd: 'build/',
-                        src: ['boot.js'],
+                        src: ['boot.js', 'embed.html'],
                         dest: 'deploy/<%= visuals.timestamp %>'
                     },
                     { // ASSETS
@@ -156,7 +174,15 @@ module.exports = function(grunt) {
                         src: ['boot.js'],
                         dest: '<%= visuals.s3.path %>',
                         params: { CacheControl: 'max-age=60' }
-                    }]
+                    },
+                    { // EMBED
+                        expand: true,
+                        cwd: 'deploy/<%= visuals.timestamp %>',
+                        src: ['embed.html'],
+                        dest: '<%= visuals.s3.path %>/embed',
+                        params: { CacheControl: 'max-age=60' }
+                    }
+                ]
             }
         },
 
@@ -194,11 +220,16 @@ module.exports = function(grunt) {
     grunt.registerTask('boot_url', function() {
         grunt.log.write('\nBOOT URL: '['green'].bold)
         grunt.log.writeln(grunt.template.process('<%= visuals.s3.domain %><%= visuals.s3.path %>/boot.js'))
+
+        grunt.log.write('\nEMBED URL: '['green'].bold)
+        grunt.log.writeln(grunt.template.process('<%= visuals.s3.domain %><%= visuals.s3.path %>/embed/embed.html'))
     })
 
-    grunt.registerTask('interactive', ['shell:interactive', 'template:bootjs', 'sass:interactive', 'copy:assets'])
-    grunt.registerTask('default', ['clean', 'copy:harness', 'interactive', 'connect', 'watch']);
-    grunt.registerTask('build', ['clean', 'interactive']);
+    grunt.registerTask('embed', ['shell:embed', 'template:embed', 'sass:embed']);
+    grunt.registerTask('interactive', ['shell:interactive', 'template:bootjs', 'sass:interactive']);
+    grunt.registerTask('all', ['interactive', 'embed', 'copy:assets'])
+    grunt.registerTask('default', ['clean', 'copy:harness', 'all', 'connect', 'watch']);
+    grunt.registerTask('build', ['clean', 'all']);
     grunt.registerTask('deploy', ['loadDeployConfig', 'prompt:visuals', 'build', 'copy:deploy', 'aws_s3', 'boot_url']);
 
     grunt.loadNpmTasks('grunt-aws');

@@ -1,0 +1,12 @@
+@import "fonts";
+
+html,
+body {
+    @include fs-bodyCopy(2);
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.interactive-embed {
+}
