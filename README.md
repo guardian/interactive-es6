@@ -12,7 +12,7 @@ Setup
 
 Development
 -----------
-`grunt`
+`npm start`
 
 Production / deployment
 -----------------------
