@@ -3,7 +3,7 @@ import reqwest from 'reqwest';
 export function fetchJSON(url) {
 	let shouldBeHTTPS = document.location.protocol !== 'http:'
 
-	let fixedUrl = url.replace(/^https?:/, shouldBeHTTPS ? 'https:' : 'http:')
+	let fixedUrl = shouldBeHTTPS ? url.replace(/^http:/, 'https:') : url;
 
 	return reqwest({
 		url: fixedUrl,
