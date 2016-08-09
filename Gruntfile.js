@@ -157,7 +157,8 @@ module.exports = function(grunt) {
                 debug: grunt.option('dry'),
                 bucket: '<%= visuals.s3.bucket %>',
                 uploadConcurrency: 10, // 5 simultaneous uploads
-                downloadConcurrency: 10 // 5 simultaneous downloads
+                downloadConcurrency: 10, // 5 simultaneous downloads
+                awsProfile: 'interactivesProd'
             },
             production: {
                 options: {
