@@ -30,7 +30,8 @@
       "guardian/iframe-messenger": "github:guardian/iframe-messenger@master",
       "json": "github:systemjs/plugin-json@^0.1.0",
       "reqwest": "github:ded/reqwest@^1.1.5",
-      "text": "github:systemjs/plugin-text@^0.0.2"
+      "text": "github:systemjs/plugin-text@^0.0.2",
+      "youtube-iframe": "npm:youtube-iframe@^1.0.3"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.21",

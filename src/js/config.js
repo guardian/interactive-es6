@@ -26,6 +26,7 @@ System.config({
     "json": "github:systemjs/plugin-json@0.1.2",
     "reqwest": "github:ded/reqwest@1.1.5",
     "text": "github:systemjs/plugin-text@0.0.2",
+    "youtube-iframe": "npm:youtube-iframe@1.0.3",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.0"
     },
