@@ -1,7 +1,7 @@
 import reqwest from 'reqwest'
 import mainHTML from './text/main.html!text'
 import share from './lib/share'
-import pimpYouTubePlayer from './lib/youtube'
+import { pimpYouTubePlayer } from './lib/youtube'
 
 var shareFn = share('Interactive title', 'http://gu.com/p/URL', '#Interactive');
 

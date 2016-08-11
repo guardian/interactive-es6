@@ -1,6 +1,6 @@
 import youTubeIframe from 'youtube-iframe-player'
 
-export default function pimpYouTubePlayer(videoId, placeholderId, height, width) {
+export function pimpYouTubePlayer(videoId, placeholderId, height, width) {
 
     youTubeIframe.init(function() {
         //preload youtube iframe API
@@ -23,4 +23,6 @@ export default function pimpYouTubePlayer(videoId, placeholderId, height, width)
             }
         });
     })
-};
+}
+
+export { pimpYouTubePlayer };
