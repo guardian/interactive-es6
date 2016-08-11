@@ -27,6 +27,7 @@ System.config({
     "reqwest": "github:ded/reqwest@1.1.5",
     "text": "github:systemjs/plugin-text@0.0.2",
     "youtube-iframe": "npm:youtube-iframe@1.0.3",
+    "youtube-iframe-player": "npm:youtube-iframe-player@1.0.1",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.0"
     },
@@ -78,9 +79,16 @@ System.config({
     "npm:process@0.11.3": {
       "assert": "github:jspm/nodelibs-assert@0.1.0"
     },
+    "npm:require-sdk@0.0.2": {
+      "load-script": "npm:load-script@1.0.0",
+      "pubsub": "npm:pubsub@0.0.5"
+    },
     "npm:util@0.10.3": {
       "inherits": "npm:inherits@2.0.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:youtube-iframe-player@1.0.1": {
+      "require-sdk": "npm:require-sdk@0.0.2"
     }
   }
 });

@@ -21,5 +21,6 @@ export function init(el, context, config, mediator) {
         shareEl.addEventListener('click',() => shareFn(network));
     });
     
-pimpYouTubePlayer('-Gy7poRbUHY', 'ytGuPlayer');
+pimpYouTubePlayer('-Gy7poRbUHY', 'ytGuPlayer', '390', '640');
+    
 }

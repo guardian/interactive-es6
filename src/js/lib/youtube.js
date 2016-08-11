@@ -1,39 +1,26 @@
-import youTubeIframe from 'youtube-iframe'
+import youTubeIframe from 'youtube-iframe-player'
 
-export default function pimpYouTubePlayer(videoId, placeholderId) {
+export default function pimpYouTubePlayer(videoId, placeholderId, height, width) {
 
-    function getPlayerProps() {
-        const o = {};
-        Array.from(document.querySelectorAll('input')).forEach(function(input) {
-            var key = input.id;
-            var val = input.value;
-            o[key] = val;
-        });
-        o.autoplay = 1;
+    youTubeIframe.init(function() {
+        //preload youtube iframe API
 
-        return o;
-    }
-
-
-    function onPlayerReady(event) {
-        p.style.display = 'none';
-        event.target.playVideo();
-    }
-    
-
-    const p = document.getElementById('placeholder');
-    p.addEventListener('click', function() {
-        youTubeIframe.load(function(YT) {
-            new YT.Player(placeholderId, {
-                height: '390',
-                width: '640',
+        const p = document.getElementById('placeholder');
+        p.addEventListener('click', function() {
+            var player = youTubeIframe.createPlayer(placeholderId, {
+                height: height,
+                width: width,
                 videoId: videoId,
-                enablejsapi: 1,
+                playerVars: { 'autoplay': 0, 'controls': 1 },
                 events: {
-                    onReady: onPlayerReady
-                },
-                playerVars: getPlayerProps()
+                    'onReady': playerReady
+                }
             });
+
+            function playerReady(event) {
+                p.style.display = 'none';
+                player.playVideo();
+            }
         });
-    });
-}
+    })
+};
