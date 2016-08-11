@@ -1,7 +1,7 @@
 import reqwest from 'reqwest'
 import mainHTML from './text/main.html!text'
 import share from './lib/share'
-import { pimpYouTubePlayer } from './lib/youtube'
+import { pimpYouTubePlayer, getYouTubeVideoDuration } from './lib/youtube'
 
 var shareFn = share('Interactive title', 'http://gu.com/p/URL', '#Interactive');
 
@@ -22,5 +22,5 @@ export function init(el, context, config, mediator) {
     });
     
 pimpYouTubePlayer('-Gy7poRbUHY', 'ytGuPlayer', '390', '640');
-    
+getYouTubeVideoDuration('-Gy7poRbUHY');
 }
