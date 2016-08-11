@@ -7,7 +7,7 @@ export default function pimpYouTubePlayer(videoId, placeholderId, height, width)
 
         const p = document.getElementById('placeholder');
         p.addEventListener('click', function() {
-            var player = youTubeIframe.createPlayer(placeholderId, {
+            var youTubePlayer = youTubeIframe.createPlayer(placeholderId, {
                 height: height,
                 width: width,
                 videoId: videoId,
@@ -19,7 +19,7 @@ export default function pimpYouTubePlayer(videoId, placeholderId, height, width)
 
             function playerReady(event) {
                 p.style.display = 'none';
-                player.playVideo();
+                youTubePlayer.playVideo();
             }
         });
     })
