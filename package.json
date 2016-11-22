@@ -5,7 +5,7 @@
   "devDependencies": {
     "bower": "^1.7.7",
     "grunt": "^0.4.5",
-    "grunt-aws-s3": "^0.13.0",
+    "grunt-aws-s3": "^0.14.5",
     "grunt-cli": "^1.1.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-connect": "^0.10.1",
@@ -30,7 +30,8 @@
       "guardian/iframe-messenger": "github:guardian/iframe-messenger@master",
       "json": "github:systemjs/plugin-json@^0.1.0",
       "reqwest": "github:ded/reqwest@^1.1.5",
-      "text": "github:systemjs/plugin-text@^0.0.2"
+      "text": "github:systemjs/plugin-text@^0.0.2",
+      "youtube-iframe-player": "npm:youtube-iframe-player@^1.0.1"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.21",
